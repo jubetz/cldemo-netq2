@@ -1,0 +1,57 @@
+#########
+## Configured by Ansible
+#########
+
+# Loopback interface
+auto lo
+iface lo inet loopback
+  address 10.09.0.42/32
+  alias loopback interface
+
+# Management interface
+auto eth0
+iface eth0 inet dhcp
+    alias management interface
+    vrf mgmt
+
+auto mgmt
+iface mgmt
+    address 127.0.0.1/8
+    vrf-table auto
+
+# Port to Edge01
+auto swp1
+iface swp1
+  alias to Edge01
+
+# Port to Internet
+auto swp44
+iface swp44
+  alias to Internet
+  # This is required for Vagrant only
+  post-up ip link set swp44 promisc on
+
+# Port to Exit01
+auto swp49
+iface swp49
+  alias to Exit01
+  # This is required for Vagrant only
+  post-up ip link set swp49 promisc on
+
+# Port to Exit01
+auto swp50
+iface swp50
+  alias to Exit01
+  # This is required for Vagrant only
+  post-up ip link set swp50 promisc on
+
+# Port to Spine01
+auto swp51
+iface swp51
+  alias to Spine01
+
+# Port to Spine02
+auto swp52
+iface swp52
+  alias to Spine02
+

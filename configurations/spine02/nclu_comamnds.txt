@@ -1,0 +1,22 @@
+net add vrf mgmt
+net commit
+
+net add loopback lo ip address 10.100.100.2/32
+net add loopback lo alias loopback interface
+net add interface swp1,swp2,swp3,swp4,swp29,swp30,swp31,swp32
+net add bgp autonomous-system 65532
+net add bgp router-id 10.100.100.2
+net add bgp bestpath as-path multipath-relax
+net add bgp neighbor swp1 interface remote-as external
+net add bgp neighbor swp2 interface remote-as external
+net add bgp neighbor swp3 interface remote-as external
+net add bgp neighbor swp4 interface remote-as external
+net add bgp neighbor swp29 interface remote-as external
+net add bgp neighbor swp30 interface remote-as external
+net add bgp network 10.100.100.2/32
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+net add bgp evpn neighbor swp3 activate
+net add bgp evpn neighbor swp4 activate
+net add bgp evpn neighbor swp29 activate
+net add bgp evpn neighbor swp30 activate
