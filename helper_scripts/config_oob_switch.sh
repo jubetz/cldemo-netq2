@@ -34,8 +34,6 @@ echo "This is a fake license" > /etc/cumulus/.license.txt
 
 ifreload -a
 
-net add vrf mgmt
-net commit
 
 echo "#################################"
 echo "   Finished "
