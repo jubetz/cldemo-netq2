@@ -6,8 +6,8 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ansible_lsb.release | version_compare('3.0', '>=') }}"
-        msg: "Cumulus Linux version must be 3.0 or later. Version {{ansible_lsb.release}} detected"
+        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
+        msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
 
   tasks:
     - name: Enable FRR Zebra
