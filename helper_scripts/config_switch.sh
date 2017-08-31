@@ -43,7 +43,8 @@ sed -i 's/eth0/eth1/g' /tmp/foo/grub/grub.cfg
 sed -i 's/eth0/eth1/g' /tmp/foo/onie/grub/grub-extra.cfg
 umount /tmp/foo
 
-
+net add vrf mgmt
+net commit
 
 echo "#################################"
 echo "   Finished"
