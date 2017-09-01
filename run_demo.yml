@@ -86,7 +86,7 @@
       become_user: cumulus
       when: inventory_hostname == "server01"
 
-    - name: Configure Server01 Ping Cronjob
+    - name: Configure Server02 Ping Cronjob
       cron:
         name: "server ping"
         job: "ping -c 1 10.2.4.104"
