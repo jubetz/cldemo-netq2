@@ -34,9 +34,9 @@
     - name: Copy Routing Configuration
       copy:
         src: configurations/{{ansible_hostname}}/frr.conf
-        dest: /etc/quagga/frr.conf
+        dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
-      notify: apply quagga config
+      notify: apply frr config
 
   handlers:
     - name: restart frr service
@@ -49,9 +49,9 @@
         name: networking
         state: reloaded
 
-    - name: apply quagga config
+    - name: apply frr config
       service:
-        name: quagga
+        name: frr
         state: reloaded
 
 - hosts: internet
