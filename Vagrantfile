@@ -476,7 +476,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit02"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -573,7 +573,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit01"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -670,7 +670,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine02"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -757,7 +757,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine01"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -844,7 +844,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf04"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -941,7 +941,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf02"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -1038,7 +1038,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf03"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -1135,7 +1135,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf01"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -1232,7 +1232,7 @@ end
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_edge01"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 512
+      v.memory = 768
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
