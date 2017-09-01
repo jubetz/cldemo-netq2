@@ -54,21 +54,6 @@
         name: frr
         state: reloaded
 
-- hosts: internet
-  become: yes
-  tasks:
-    - name: Copy Interface Config
-      copy:
-        src: configurations/{{ansible_hostname}}/interfaces
-        dest: /etc/network/interfaces
-      register: apply interface changes
-
-  handlers:
-    - name: apply interface changes
-      service:
-        name: networking
-        state: reloaded
-
 - hosts: servers
   become: yes
   tasks:
