@@ -46,3 +46,9 @@ net add bgp ipv4 unicast network 10.0.0.112/32
 net add bgp l2vpn evpn neighbor swp51 activate
 net add bgp l2vpn evpn neighbor swp52 activate
 net add bgp l2vpn evpn advertise-all-vni
+net add vxlan vni13 bridge arp-nd-suppress on
+net add vxlan vni24 bridge arp-nd-suppress on
+net add vlan 13 ip address-virtual 44:39:39:ff:00:13 10.1.3.1/24
+net add vlan 24 ip address-virtual 44:39:39:ff:00:24 10.2.4.1/24
+net add vlan 24 ip address 10.2.4.11/24
+net add vlan 13 ip address 10.1.3.11/24

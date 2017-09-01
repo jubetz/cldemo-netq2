@@ -117,3 +117,18 @@ iface vni24
   bridge-learning off
   mstpctl-bpduguard yes
   mstpctl-portbpdufilter yes
+  bridge-arp-nd-suppress on
+
+auto vlan13
+iface vlan13
+    address 10.1.3.14/24
+    address-virtual 44:39:39:ff:00:13 10.1.3.1/24
+    vlan-id 13
+    vlan-raw-device bridge
+
+auto vlan24
+iface vlan24
+    address 10.2.4.14/24
+    address-virtual 44:39:39:ff:00:24 10.2.4.1/24
+    vlan-id 24
+    vlan-raw-device bridge
