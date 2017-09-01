@@ -6,7 +6,7 @@
 auto lo
 iface lo inet loopback
   address 10.0.0.12/32
-  clagd-vxlan-anycast-ip 10.0.0.21
+  clagd-vxlan-anycast-ip 10.0.0.112
   alias loopback interface
 
 # Management interface
