@@ -131,6 +131,10 @@
         enabled: yes
         state: started
 
+    - name: Pause to let NetQ service to start
+      pause:
+        seconds: 5
+
     - name: Add netq server IP
       command: netq add server 192.168.0.254
 
