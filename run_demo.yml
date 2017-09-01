@@ -121,12 +121,12 @@
       register: install-netq
 
     - name: Restart Rsyslog
-      systemd:
+      service:
         name: rsyslog
         state: restarted
 
     - name: Enable NetQ Service
-      systemd:
+      service:
         name: netqd
         enabled: yes
         state: started
@@ -150,6 +150,6 @@
 
   handlers:
     - name: restart LLDP
-      systemd:
+      service:
         name: lldpd
         state: restarted
