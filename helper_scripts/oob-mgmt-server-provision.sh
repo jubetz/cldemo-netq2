@@ -17,22 +17,32 @@ oob-mgmt-switch ansible_host=192.168.0.1 ansible_user=cumulus
 exit02 ansible_host=192.168.0.42 ansible_user=cumulus
 exit01 ansible_host=192.168.0.41 ansible_user=cumulus
 
-[leaf]
+[leafs]
 leaf04 ansible_host=192.168.0.14 ansible_user=cumulus
 leaf02 ansible_host=192.168.0.12 ansible_user=cumulus
 leaf03 ansible_host=192.168.0.13 ansible_user=cumulus
 leaf01 ansible_host=192.168.0.11 ansible_user=cumulus
 
-[spine]
+[spines]
 spine02 ansible_host=192.168.0.22 ansible_user=cumulus
 spine01 ansible_host=192.168.0.21 ansible_user=cumulus
 
-[host]
-edge01 ansible_host=192.168.0.51 ansible_user=cumulus
+[servers]
 server01 ansible_host=192.168.0.31 ansible_user=cumulus
 server03 ansible_host=192.168.0.33 ansible_user=cumulus
 server02 ansible_host=192.168.0.32 ansible_user=cumulus
 server04 ansible_host=192.168.0.34 ansible_user=cumulus
+
+[exits]
+exit01 ansible_user=cumulus ansible_ssh_pass=CumulusLinux! ansible_become_pass=CumulusLinux!
+exit02 ansible_user=cumulus ansible_ssh_pass=CumulusLinux! ansible_become_pass=CumulusLinux!
+
+[internets]
+internet ansible_user=cumulus ansible_ssh_pass=CumulusLinux! ansible_host=192.168.0.253
+
+[network:children]
+leafs
+spines
 
 EOT
 
