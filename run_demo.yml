@@ -52,6 +52,9 @@
     - name: Add netq server IP
       command: netq add server 192.168.0.254 vrf mgmt
 
+    - name: Restart NetQ Agent
+      command: netq agent restart
+
   handlers:
     - name: restart frr service
       service:
