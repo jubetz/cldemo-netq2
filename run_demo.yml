@@ -26,14 +26,14 @@
 
     - name: Copy Interfaces File
       copy:
-        src: roles/{{ansible_hostname}}/interfaces
+        src: configurations/{{ansible_hostname}}/interfaces
         dest: /etc/network/interfaces
         validate: ifup -a -s -i %s
       notify: apply interface changes
 
     - name: Copy Routing Configuration
       copy:
-        src: roles/{{ansible_hostname}}/frr.conf
+        src: configurations/{{ansible_hostname}}/frr.conf
         dest: /etc/quagga/frr.conf
         validate: vtysh -C -f %s
       notify: apply quagga config
@@ -59,7 +59,7 @@
   tasks:
     - name: Copy Interface Config
       copy:
-        src: roles/{{ansible_hostname}}/interfaces
+        src: configurations/{{ansible_hostname}}/interfaces
         dest: /etc/network/interfaces
       register: apply interface changes
 
@@ -74,7 +74,7 @@
   tasks:
     - name: Copy Interface Config
       copy:
-        src: roles/{{ansible_hostname}}/interfaces
+        src: configurations/{{ansible_hostname}}/interfaces
         dest: /etc/network/interfaces
       register: reboot
 
