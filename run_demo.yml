@@ -38,6 +38,20 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq
+        update_cache: yes
+      register: install-netq
+
+    - name: Restart Rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+
+    - name: Add netq server IP
+      command: netq add server 192.168.0.254 vrf mgmt
+
   handlers:
     - name: restart frr service
       service:
@@ -89,6 +103,39 @@
 
     - name: Apply LLDP Settings
       meta: flush_handlers
+
+    - name: Add Cumulus Apt Key
+      apt_key:
+        url: "https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
+        state: present
+
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
+        state: present
+
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq
+        update_cache: yes
+      register: install-netq
+
+    - name: Restart Rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+
+    - name: Enable NetQ Service
+      service:
+        name: netqd
+        enabled: yes
+        state: started
+
+    - name: Add netq server IP
+      command: netq add server 192.168.0.254
+
+    - name: Restart NetQ Agent
+      command: netq agent restart
 
     - name: reboot
       command: /sbin/shutdown -r +1
