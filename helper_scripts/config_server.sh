@@ -30,6 +30,9 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzH+R+UhjVicUtI0daNUcedYhfvgT1dbZXgY
 chmod 700 -R /home/cumulus
 chown cumulus:cumulus -R /home/cumulus
 
+# Disable AAAA records; speeds up APT for v4 only networks
+sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
+
 # Other stuff
 sudo apt-get update -qy
 sudo apt-get install lldpd -qy
