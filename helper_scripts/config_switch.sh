@@ -43,6 +43,9 @@ sed -i 's/eth0/eth1/g' /tmp/foo/grub/grub.cfg
 sed -i 's/eth0/eth1/g' /tmp/foo/onie/grub/grub-extra.cfg
 umount /tmp/foo
 
+# Disable AAAA records; speeds up APT for v4 only networks
+sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
+
 net add vrf mgmt
 net commit
 
