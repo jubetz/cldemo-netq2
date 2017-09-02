@@ -153,12 +153,43 @@
         state: started
         enabled: yes
 
-    - name: reboot
-      command: /sbin/shutdown -r +1
-      async: 0
-      poll: 0
-      ignore_errors: true
-      when: reboot.changed
+    - name: Enable ifupdown2 after reboot
+      lineinfile:
+        dest: "/lib/systemd/system/networking.service"
+        regexp: '^RemainAfterExit'
+        insertafter: '^\[Service\]'
+        line: 'RemainAfterExit=yes'
+
+    - name: Enable eth1
+      command: ifup eth1
+      ignore_errors: yes
+
+    - name: Enable eth2
+      command: ifup eth2
+      ignore_errors: yes
+
+    - name: Copy Quagga daemons File
+      copy:
+        src: configurations/{{ansible_hostname}}/daemons
+        dest: /etc/quagga/daemons
+
+    - name: Copy Quagga configuration File
+      copy:
+        src: configurations/{{ansible_hostname}}/quagga.conf
+        dest: /etc/quagga/quagga.conf
+
+    - name: Deploy ROH Container
+      docker_container:
+        name: cumulus-roh
+        privileged: true
+        interactive: true
+        network_mode: host
+        tty: true
+        recreate: yes
+        image: cumulusnetworks/quagga:latest
+        volumes:
+          - "/etc/quagga/daemons:/etc/quagga/daemons"
+          - "/etc/quagga/Quagga.conf:/etc/quagga/Quagga.conf"
 
   handlers:
     - name: restart LLDP
