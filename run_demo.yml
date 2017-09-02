@@ -99,6 +99,7 @@
       apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
         state: present
+        update_cache: no
 
     - name: Add Cumulus Apt Key
       apt_key:
@@ -109,6 +110,7 @@
       apt_repository:
         repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
         state: present
+        update_cache: no
 
     - name: Install NetQ, DockerCE, ifupdown2
       apt:
