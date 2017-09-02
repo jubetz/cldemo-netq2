@@ -21,8 +21,3 @@ net add bgp neighbor swp2 interface remote-as external
 net add bgp neighbor swp3 interface remote-as external
 net add bgp neighbor swp4 interface remote-as external
 net add bgp ipv4 unicast network 10.0.0.21/32
-
-net add bgp l2vpn evpn neighbor swp1 activate
-net add bgp l2vpn evpn neighbor swp2 activate
-net add bgp l2vpn evpn neighbor swp3 activate
-net add bgp l2vpn evpn neighbor swp4 activate
