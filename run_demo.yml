@@ -177,10 +177,6 @@
         - eth2
         - lo
 
-    - name: Collect applied loopback IPs
-      setup:
-        gather_subset: network
-
     - name: Create Quagga configuration directory
       file:
         path: /etc/quagga
@@ -210,6 +206,9 @@
           - "/etc/quagga/daemons:/etc/quagga/daemons"
           - "/etc/quagga/Quagga.conf:/etc/quagga/Quagga.conf"
 
+- hosts: server01
+  become: yes
+  tasks:
     - name: Determine swarm status
       shell: >
         docker info | egrep '^Swarm: ' | cut -d ' ' -f2
@@ -217,19 +216,22 @@
 
     - name: Configure Server01 as Docker Swarm manager
       command: docker swarm init --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}}
-      when: inventory_hostname == "server01" and "'active' not in swarm_status.stdout_lines"
+      when: '"active" not in swarm_status.stdout_lines'
 
     - name: Get Worker Token
       command: docker swarm join-token -q worker
-      register: worker_token
+      register: swarm_manager_output
 
-    - name: Get Manager Token
-      command: docker swarm join-token -q manager
-      register: manager_token
+    - name: Set Worker Token as an Ansible fact
+      set_fact:
+        worker_token: "{{swarm_manager_output.stdout}}"
 
+- hosts: server02,server03,server04
+  become: yes
+  tasks:
     - name: Join Docker Swarm
-      command: docker swarm join --token {{ worker_token.stdout }} --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}} 10.0.0.31
-      when: inventory_hostname != "server01" and
+      command: docker swarm join --token {{hostvars['server01']['worker_token']}} --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}} 10.0.0.31
+      when: '"active" not in swarm_status.stdout_lines and inventory_hostname != "server01"'
 
   handlers:
     - name: restart LLDP
