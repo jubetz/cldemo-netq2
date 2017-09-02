@@ -116,10 +116,15 @@
       apt:
         name: "{{item}}"
         update_cache: yes
-        with_items:
-          - docker-ce
-          - ifupdown2
-          - cumulus-netq
+      with_items:
+        - docker-ce
+        - ifupdown2
+        - cumulus-netq
+
+    - name: Enable ifupdown2
+      service:
+        name: networking
+        enabled: yes
 
     - name: Restart Rsyslog
       service:
