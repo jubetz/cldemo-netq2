@@ -253,4 +253,11 @@
       command: docker swarm join --token {{hostvars['server01']['worker_token']}} --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}} 10.0.0.31
       when: '"active" not in swarm_status.stdout_lines'
 
-
+# Kick back to server01 to deploy the services
+# Services can only be deployed from the master
+# This is a little messy as a result of being in a single, flat playbook
+- hosts: server01
+  become: yes
+  tasks:
+    - name: Deploy Apache Containers
+      command: docker service create --name apache_web --replicas 3 --publish 8080:80 php:5.6-apache
