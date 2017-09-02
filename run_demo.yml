@@ -172,17 +172,20 @@
       command: ifup eth2
       ignore_errors: yes
 
+    - name: Create Quagga configuration directory
+      file:
+        path: /etc/quagga
+        state: directory
+
     - name: Copy Quagga daemons File
       copy:
         src: configurations/{{ansible_hostname}}/daemons
         dest: /etc/quagga/daemons
-        directory_mode: yes
 
     - name: Copy Quagga configuration File
       copy:
         src: configurations/{{ansible_hostname}}/quagga.conf
         dest: /etc/quagga/quagga.conf
-        directory_mode: yes
 
     - name: Deploy ROH Container
       docker_container:
