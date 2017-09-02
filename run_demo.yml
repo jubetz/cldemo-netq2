@@ -176,13 +176,13 @@
       copy:
         src: configurations/{{ansible_hostname}}/daemons
         dest: /etc/quagga/daemons
-        state: directory
+        directory_mode: yes
 
     - name: Copy Quagga configuration File
       copy:
         src: configurations/{{ansible_hostname}}/quagga.conf
         dest: /etc/quagga/quagga.conf
-        state: directory
+        directory_mode: yes
 
     - name: Deploy ROH Container
       docker_container:
