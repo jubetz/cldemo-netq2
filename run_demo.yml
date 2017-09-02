@@ -112,7 +112,7 @@
         state: present
         update_cache: no
 
-    - name: Install NetQ, DockerCE, ifupdown2
+    - name: Install NetQ, DockerCE, ifupdown2, pip
       apt:
         name: "{{item}}"
         update_cache: yes
@@ -120,6 +120,11 @@
         - docker-ce
         - ifupdown2
         - cumulus-netq
+        - python-pip
+
+    - name: Install docker-py module
+      pip:
+        name: docker-py
 
     - name: Enable ifupdown2
       service:
