@@ -181,6 +181,7 @@
       file:
         path: /etc/quagga
         state: directory
+        mode: 0775
 
     - name: Copy Quagga daemons File
       copy:
