@@ -55,4 +55,7 @@ library = /usr/share/ansible
 host_key_checking=False
 callback_whitelist = profile_tasks
 retry_files_enabled = False
+pipelining = True
+forks = 6
+strategy = free
 EOT
