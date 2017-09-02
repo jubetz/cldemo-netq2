@@ -136,16 +136,20 @@
         name: netqd
         enabled: yes
         state: started
+      register: netq_started
 
     - name: Pause to let NetQ service to start
       pause:
         seconds: 5
+      when: netq_started.changed
 
     - name: Add netq server IP
       command: netq add server 192.168.0.254
+      when: netq_started.changed
 
     - name: Restart NetQ Agent
       command: netq agent restart
+      when: netq_started.changed
 
     - name: Start Docker
       service:
@@ -172,11 +176,13 @@
       copy:
         src: configurations/{{ansible_hostname}}/daemons
         dest: /etc/quagga/daemons
+        state: directory
 
     - name: Copy Quagga configuration File
       copy:
         src: configurations/{{ansible_hostname}}/quagga.conf
         dest: /etc/quagga/quagga.conf
+        state: directory
 
     - name: Deploy ROH Container
       docker_container:
