@@ -210,10 +210,14 @@
           - "/etc/quagga/daemons:/etc/quagga/daemons"
           - "/etc/quagga/Quagga.conf:/etc/quagga/Quagga.conf"
 
+    - name: Determine swarm status
+      shell: >
+        docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+      register: swarm_status
+
     - name: Configure Server01 as Docker Swarm manager
-      #command: docker swarm init --advertise-addr 10.0.0.31
-      command: docker swarm init --advertise-addr {{ansible_lo.ipv4_secondaries.address}}
-      when: inventory_hostname == "server01"
+      command: docker swarm init --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}}
+      when: inventory_hostname == "server01" and "'active' not in swarm_status.stdout_lines"
 
     - name: Get Worker Token
       command: docker swarm join-token -q worker
@@ -222,6 +226,10 @@
     - name: Get Manager Token
       command: docker swarm join-token -q manager
       register: manager_token
+
+    - name: Join Docker Swarm
+      command: docker swarm join --token {{ worker_token.stdout }} --advertise-addr {{ansible_lo.ipv4_secondaries[0].address}} 10.0.0.31
+      when: inventory_hostname != "server01" and
 
   handlers:
     - name: restart LLDP
