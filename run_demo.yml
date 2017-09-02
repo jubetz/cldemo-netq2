@@ -191,7 +191,7 @@
     - name: Copy Quagga configuration File
       copy:
         src: configurations/{{ansible_hostname}}/quagga.conf
-        dest: /etc/quagga/quagga.conf
+        dest: /etc/quagga/Quagga.conf
 
     - name: Deploy ROH Container
       docker_container:
