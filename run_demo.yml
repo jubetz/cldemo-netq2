@@ -169,13 +169,17 @@
         insertafter: '^\[Service\]'
         line: 'RemainAfterExit=yes'
 
-    - name: Enable eth1
-      command: ifup eth1
+    - name: Enable network interfaces
+      command: ifup {{item}}
       ignore_errors: yes
+      with_items:
+        - eth1
+        - eth2
+        - lo
 
-    - name: Enable eth2
-      command: ifup eth2
-      ignore_errors: yes
+    - name: Collect applied loopback IPs
+      setup:
+        gather_subset: network
 
     - name: Create Quagga configuration directory
       file:
@@ -205,6 +209,19 @@
         volumes:
           - "/etc/quagga/daemons:/etc/quagga/daemons"
           - "/etc/quagga/Quagga.conf:/etc/quagga/Quagga.conf"
+
+    - name: Configure Server01 as Docker Swarm manager
+      #command: docker swarm init --advertise-addr 10.0.0.31
+      command: docker swarm init --advertise-addr {{ansible_lo.ipv4_secondaries.address}}
+      when: inventory_hostname == "server01"
+
+    - name: Get Worker Token
+      command: docker swarm join-token -q worker
+      register: worker_token
+
+    - name: Get Manager Token
+      command: docker swarm join-token -q manager
+      register: manager_token
 
   handlers:
     - name: restart LLDP
