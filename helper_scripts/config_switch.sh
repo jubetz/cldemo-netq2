@@ -48,9 +48,6 @@ sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /
 
 net add vrf mgmt
 net commit
-sudo systemctl stop ntp.service
-sudo systemctl disable ntp.service
-sudo systemctl start ntp@mgmt
 
 echo "#################################"
 echo "   Finished"
