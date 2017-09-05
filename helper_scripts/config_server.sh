@@ -35,7 +35,7 @@ sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /
 
 # Other stuff
 sudo apt-get update -qy
-sudo apt-get install lldpd -qy
+sudo apt-get install lldpd traceroute -qy
 
 
 echo "#################################"
