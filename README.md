@@ -110,6 +110,8 @@ Again, you can see the changes with `netq spine02 show changes between 1s and 5m
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
 
+If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run `vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04' then recreate a fresh environment with `vagrant up`
+
 ![Docker + Routing on the Host](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png)
 
 Just as described in the Reference Topology diagram, each server is configured with a /32 loopback IP and BGP ASN.
