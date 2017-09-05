@@ -1,74 +1,141 @@
-# NetQ 1.0 Demo
+# Cumulus NetQ Demo
 
-This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/display/DOCS/Using+netq+to+Troubleshoot+the+Network) Fabric Validation System using the Cumulus [reference topology](https://github.com/cumulusnetworks/cldemo-vagrant). Please vist the reference topology github page for detailed instructions on using Cumulus Vx with Vagrant.
+This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/display/DOCS/Using+netq+to+Troubleshoot+the+Network) Fabric Validation System using the Cumulus [reference topology](https://github.com/cumulusnetworks/cldemo-vagrant). Please visit the reference topology github page for detailed instructions on using Cumulus Vx with Vagrant.
 
 
 ![Cumulus Reference Topology](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png).
 
-Quickstart
+_Don't want to run it locally? You can also run this demo in [Cumulus In the Cloud](https://cumulusnetworks.com/try-for-free/)_
+
+Prerequisites
 ------------------------
-* Running this simulation uses more than 10G of RAM.
-* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release 1.9.5.
-* Install [Ansible](instructions at http://docs.ansible.com/ansible/intro_installation.html)
-* Install git on your platform if you want to git clone this repository. Else select the download ZIP option from the directory and download the zip file.
-* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1. You need to be logged in to the site to access this.
-* Pick the Vagrant hypervisor. By default the Virtualbox hypervisor is used. To use Libvirt and KVM, follow the directions below.
+* Running this simulation roughly 10G of RAM.
+* Internet connectivity is required from the hypervisor. Multiple packages are installed on both the switches and servers when the lab is created.
+* Download this repository locally with `git clone https://github.com/CumulusNetworks/cldemo-netq.git` or if you do not have Git installed, [Download the zip file](https://github.com/CumulusNetworks/cldemo-netq/archive/master.zip)
+* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1. You need to be logged into the site to access this.
+* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release [1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/).
+* Install [Virtualbox](https://www.virtualbox.org/wiki/VirtualBox) or [Libvirt+KVM](https://libvirt.org/drvqemu.html) hypervisors.
+
+Using Virtualbox
+------------------------
 * Add the downloaded box to vagrant via: `vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts`
+
+Using Libvirt+KVM
+------------------------
+* Rename `Vagrantfile-kvm` to `Vagrantfile` replacing the existing Vagrantfile that is used for Virtualbox.
+* Install the Vagrant mutate plugin with `vagrant plugin install vagrant-mutate`
+* Convert the existing NetQ telemetry server box image to a libvirt compatible version. `vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
+* Rename the new Vagrant box image by changing the Vagrant directory name. `mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
+
+Running the Demo
+------------------------
 * The Telemetry Server replaces the oob-mgmt-server in the topology.
-* If using a zip file, extract the downloaded zip file. If using git, run `git clone https://github.com/cumulusnetworks/cldemo-netq netqdemo`
-* `cd netqdemo`
+* `cd cldemo-netq`
 * `vagrant up oob-mgmt-server oob-mgmt-switch`
 * `vagrant up` (bringing up the oob-mgmt-server and switch first prevent DHCP issues)
 * `vagrant ssh oob-mgmt-server`
 * `sudo su - cumulus`
-* `cd netqdemo`
-* `ansible-playbook -s RUNME.yml` for L3 or `ansible-playbook -s RUNME-evpn.yml` for EVPN config
-* Log out and log back in to enable command completion for netq.
-* `netq help`
-* `netq check bgp`
-* `netq trace 10.1.20.1 from 10.3.20.3`vrf default
-* `ip route | netq resolve | less -R`
 
-This demo is known to work with Vagrant version 1.9.5.
+### EVPN Demo
+The first demo is based on BGP-EVPN with VxLAN Routing.
+![EVPN Logical Topology](https://raw.githubusercontent.com/CumulusNetworks/cldemo-netq/master/images/evpn-topology.png)
 
-Details
-------------------------
+Server01 and Server03 are in VLAN13, connected via VxLAN (VNI13).
+Server02 and Server04 are in VLAN24, connected via VxLAN (VNI24).
 
-This demo will:
-* configure the customer reference topology with BGP unnumbered. For the EVPN config, it'll configure the VxLAN devices for VLANs 100-105 on the servers and on the bridges on leaves. PVID is 20.
-* configure CLAG on the leaves for the servers to be dual-attached and bonded. For EVPN, setup VxLAN active-active.
-* install NetQ on all nodes including servers and routers
-* configure NetQ agents to start pushing data to the telemetry server
+All four leaf switches are configured with anycast gateways for both VLAN13 and VLAN24.
 
-The servers are assumed to be Ubuntu 16.04 hosts, and the version of Cumulus VX is at least 3.3.0. The hypervisor used is assumed to be Virtualbox by default. If you want to use the libvirt version, copy Vagrantfile-kvm to Vagrantfile.
+Server01 has the IP `10.1.3.101`
+Server02 has the IP `10.2.4.102`
+Server03 has the IP `10.1.3.103`
+Server04 has the IP `10.2.4.104`
 
-When the playbook RUNME.yml is run, it assumes the network is up and running (via `vagrant up`) but it **has not** yet been configured. If the network has been configured already, run the reset.yml playbook to reset the configuration state of the network. Once the netq demo has been configured with `RUNME.yml` you can either log into any node in the network or use the oob-mgmt-server directly to interact with the netq service. Use the `netq` command to interact with the NetQ system.
+*To provision this demo*, from the oob-mgmt-server
+* `cd evpn`
+* `ansible-playbook run_demo.yml`
 
-Some useful examples to get you going:
-* netq check bgp
-* netq check vlan
-* netq trace 10.1.20.1 from 10.3.20.3 vrf default
-* netq show ip routes 10.1.20.1 origin
-* netq leaf01 show macs
-* netq show changes between 1s and 2m
-* ip route | netq resolve | less -R
+After the playbook finishes, you can run a number of tests to view connectivity
+From server01:
+`ping 10.1.3.103` (server03)
+`ping 10.2.4.104` (server04)
+`traceroute 10.1.3.103`
+`traceroute 10.2.4.104`
 
-To see VxLAN traceroute in action, log in to server01, ping 10.253.100.3. Then, type `netq trace 10.253.100.3 from 10.253.100.1 vrf default`.
-netq help and netq example provide further assistance in using netq.
+Notice the path from server01 to server03 is direct, while server01 to server04 passes through an extra hop (the gateway at 10.1.3.1)
 
-Resetting The Topology
-------------------------
-If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state. For example, use this to switch between the L3 only and EVPN configs.
+From leaf01:
+`ip route show | netq resolve` to view the routing table with NetQ hostname resolution
+`netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101`
+`netq trace 44:38:39:00:00:17 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
 
-    ansible-playbook -s reset.yml
+Now, on leaf01 shut down the link to spine01
+`sudo ifdown swp51`
 
-Libvirt Vagrant Box
--------------------
-The NetQ Telemetry Server isn't officially supported on KVM. However, I personally use it all the time. Install the vagrant mutate plugin and run `vagrant mutate cumulus/ts libvirt` to get the libvirt version.
+Wait 10-30 seconds for NetQ to export the data.
 
-Caveats
+With NetQ, check BGP again and you should see two failed sessions.
+`netq check bgp`
+
+Again, run the NetQ traceroute that was run earlier
+`netq trace 44:38:39:00:00:17 from leaf03` and notice that there are two paths through spine02 but only a single path through spine01 now.
+
+View the changes to the fabric as a result of shutting down the interface
+`netq spine01 show changes between 1s and 5m`
+
+Next, from *spine02*:
+Change the MTU on the interface
+`net add interface swp3 mtu 9000`
+`net commit`
+
+If we check BGP again, we still have only two failed sessions: leaf01 and spine01.
+`netq check bgp`
+
+If we run the traceroute again, we will see the MTU failure in the path
+`netq trace 44:38:39:00:00:17 from leaf03`
+
+Again, you can see the changes with `netq spine02 show changes between 1s and 5m`
+
+### Docker Swarm + Routing on the Host Demo
+The second demo relies on [https://cumulusnetworks.com/products/host-pack/](Cumulus Host Pack) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
+
+[Docker + Routing on the Host](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png)
+
+Just as described in the Reference Topology diagram, each server is configured with a /32 loopback IP and BGP ASN.
+
+
+After BGP is configured on the hosts, [Docker CE](https://www.docker.com/community-edition) is automatically installed and [Docker Swarm](https://docs.docker.com/engine/swarm/) is configured.
+
+
+Within Docker Swarm, server01 acts as the _Swarm Master_ while server02, server03 and server04 act as _Swarm Workers_.
+
+A container running Apache is deployed across three of the nodes in the swarm.
+
+*To provision this demo*, from the oob-mgmt-server
+* `cd docker-roh` (roh for Routing On the Host)
+* `ansible-playbook run_demo.yml`
+
+From server01:
+`sudo docker node ls` to verify that all four servers are in the swarm
+`sudo docker service ps apache_web` to see the three apache containers deployed
+
+Log into to Quagga on server01:
+`sudo docker exec -it cumulus-roh /usr/bin/vtysh` to attach to the Quagga process
+`show ip bgp summary` to view the BGP peers
+`show ip bgp` to view the BGP routes
+`exit` to log out of quagga
+
+
+Troubleshooting
 -------
-* If the thingy isn't installed.
-* If a node is deemed unreachable during the playbook run, and this happens if the servers haven't finished rebooting after setup, ensure the node is reachable via `ansible <nodename> -m ping` and just rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question. For servers, for example, you can run `ansible-playbook -s --limit 'server*' netq.yml`.
-* TAB complete works with netq command, but you'll need to log out and log back in to get it working after a fresh install.
-* This demo is known to work with Vagrant version 1.9.5
+* The `Vagrantfile` expects the telemetry server to be named `cumulus/ts`. If you get the following error
+```The box 'cumulus/ts' could not be found or
+could not be accessed in the remote catalog. If this is a private
+box on HashiCorp's Atlas, please verify you're logged in via
+`vagrant login`. Also, please double-check the name. The expanded
+URL and error message are shown below:
+
+URL: ["https://atlas.hashicorp.com/cumulus/ts"]
+Error: The requested URL returned error: 404 Not Found```
+Please ensure you have the telemetry server downloaded and installed in Vagrant. Use `vagrant box list` to see the current Vagrant box images you have installed.
+* `vagrant ssh` fails to network devices - This is expected, as each network device connects through the `oob-mgmt-server`. Use `vagrant ssh oob-mgmt-server` then ssh to the specific network device.
+* If you log into a switch and are prompted for the password for the `vagrant` user, issue the command `su - cumulus` to change to the cumulus user on the oob-mgmt-server
