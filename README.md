@@ -7,6 +7,18 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 
 _Don't want to run it locally? You can also run this demo in [Cumulus In the Cloud](https://cumulusnetworks.com/try-for-free/)_
 
+
+Table of Contents
+=================
+* [Prerequisites](#prerequisites)
+* [Using Virtualbox](#using-virtualbox)
+* [Using Libvirt KVM](#using-libvirtkvm)
+* [Running the Demo](#running-the-demo)
+    * [EVPN Demo](#evpn-demo)
+    * [Docker Swarm   Routing on the Host Demo](#docker-swarm--routing-on-the-host-demo)
+* [Troubleshooting](#troubleshooting)
+
+
 Prerequisites
 ------------------------
 * Running this simulation roughly 10G of RAM.
