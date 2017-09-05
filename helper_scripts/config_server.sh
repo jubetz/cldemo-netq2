@@ -34,7 +34,7 @@ chown cumulus:cumulus -R /home/cumulus
 sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
 # Set UTC timezone
-sudo timedatectl set-timezone Etc/
+sudo timedatectl set-timezone Etc/UTC
 
 # Other stuff
 sudo apt-get update -qy
