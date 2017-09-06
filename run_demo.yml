@@ -171,6 +171,18 @@
       command: netq config agent restart
       when: netq_started.changed
 
+    - name: Add Docker settings to NetQ
+      blockinfile:
+        block: |
+          docker:
+          enable: true
+          poll_period: 10
+      register: netq_docker
+
+    - name: Apply NetQ Docker Settings
+      command: netq config agent restart
+      when: netq_docker.changed
+
     - name: Start Docker
       service:
         name: docker
