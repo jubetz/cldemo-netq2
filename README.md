@@ -114,7 +114,8 @@ And that EVPN is misconfigured
 
 
 Correct the EVPN misconfiguration
-```net add bgp l2vpn evpn advertise-all-vni
+```
+net add bgp l2vpn evpn advertise-all-vni
 net commit
 ```
 
@@ -137,8 +138,10 @@ View the changes to the fabric as a result of shutting down the interface
 
 Next, from **spine02**:  
 Change the MTU on the interface
-`net add interface swp3 mtu 9000`
-`net commit`
+```
+net add interface swp3 mtu 9000`
+net commit
+```
 
 If we check BGP again, we still have only two failed sessions: leaf01 and spine01.  
 `netq check bgp`
