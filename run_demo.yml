@@ -48,7 +48,8 @@
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb http://stage-repo3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
-        state: present    
+        state: present
+        validate_certs: no
 
     - name: Install NetQ
       apt:
@@ -64,7 +65,7 @@
       command: netq config add server 192.168.0.254 vrf mgmt
 
     - name: Restart NetQ Agent
-      command: netq agent restart
+      command: netq config agent restart
 
   handlers:
     - name: restart frr service
