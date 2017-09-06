@@ -46,8 +46,6 @@ umount /tmp/foo
 # Disable AAAA records; speeds up APT for v4 only networks
 sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
-net add vrf mgmt
-(sleep 3 ; net commit) &
 
 echo "#################################"
 echo "   Finished"
