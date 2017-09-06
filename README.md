@@ -76,9 +76,47 @@ From server01:
 Notice the path from server01 to server03 is direct, while server01 to server04 passes through an extra hop (the gateway at 10.1.3.1)
 
 From leaf01:
+* `netq check bgp`
+* `netq check evpn`
 * `ip route show | netq resolve` to view the routing table with NetQ hostname resolution
 * `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101`
-* `netq trace 44:38:39:00:00:17 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
+```cumulus@leaf01:mgmt-vrf:~$ netq server03 show ip neighbors
+Matching neighbor records are:
+IP Address       Hostname         Interface            Mac Address              VRF              Remote Last Changed
+---------------- ---------------- -------------------- ------------------------ ---------------- ------ ----------------
+10.1.3.101       server03         uplink               44:38:39:00:00:03        default          no     9m:8.903s
+10.1.3.13        server03         uplink               44:38:39:00:00:24        default          no     7m:24.415s
+10.1.3.14        server03         uplink               32:3e:76:e2:7b:ae        default          no     6m:58.210s
+192.168.0.254    server03         eth0                 44:38:39:00:00:5f        default          no     9m:57.746s
+```
+* `netq trace 44:38:39:00:00:03 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
+```cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 from leaf03
+leaf03 -- leaf03:vni13 -- leaf03:swp51 -- spine01:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
+                                       -- spine01:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
+                       -- leaf03:swp52 -- spine02:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
+                                       -- spine02:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
+Path MTU is 1500
+```
+
+On leaf01 misconfigure EVPN 
+```net del bgp l2vpn evpn advertise-all-vni
+net commit
+```
+
+And check that BGP is still working as expected  
+`netq check bgp`
+
+And that EVPN is misconfigured  
+`netq check evpn`
+
+
+Correct the EVPN misconfiguration
+```net add bgp l2vpn evpn advertise-all-vni
+net commit
+```
+
+Verify that EVPN is functional  
+`netq check evpn`
 
 Now, on leaf01 shut down the link to spine01  
 `sudo ifdown swp51`
@@ -89,10 +127,10 @@ With NetQ, check BGP again and you should see two failed sessions.
 `netq check bgp`
 
 Again, run the NetQ traceroute that was run earlier
-`netq trace 44:38:39:00:00:17 from leaf03` and notice that there are two paths through spine02 but only a single path through spine01 now.
+`netq trace 44:38:39:00:00:03 from leaf03` and notice that there are two paths through spine02 but only a single path through spine01 now.
 
 View the changes to the fabric as a result of shutting down the interface  
-`netq spine01 show changes between 1s and 5m`
+`netq spine01 show changes between 1s and 5m` *note* the interface state on spine01 may not change because of the virtual environment, but the BGP peer will still fail.
 
 Next, from *spine02*:  
 Change the MTU on the interface
@@ -103,9 +141,10 @@ If we check BGP again, we still have only two failed sessions: leaf01 and spine0
 `netq check bgp`
 
 If we run the traceroute again, we will see the MTU failure in the path  
-`netq trace 44:38:39:00:00:17 from leaf03`
+`netq trace 44:38:39:00:00:03 from leaf03`
 
 Again, you can see the changes with `netq spine02 show changes between 1s and 5m`
+
 
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
