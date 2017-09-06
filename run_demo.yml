@@ -175,8 +175,8 @@
       blockinfile:
         block: |
           docker:
-          enable: true
-          poll_period: 10
+            enable: true
+            poll_period: 10
         dest: /etc/netq/netq.yml
       register: netq_docker
 
