@@ -177,7 +177,7 @@
           docker:
           enable: true
           poll_period: 10
-        path: /etc/netq/netq.yml
+        dest: /etc/netq/netq.yml
       register: netq_docker
 
     - name: Apply NetQ Docker Settings
