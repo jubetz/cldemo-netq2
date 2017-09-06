@@ -184,6 +184,11 @@ Log into to Quagga on server01:
 * `exit` to log out of quagga
 
 
+Now use NetQ to verify Docker settings. On spine01:
+`netq show docker swarm cluster` to see the members of the cluster
+`netq show docker swarm network` to view the virtual swarm network
+
+
 Troubleshooting + FAQ
 -------
 * The `Vagrantfile` expects the telemetry server to be named `cumulus/ts`. If you get the following error
