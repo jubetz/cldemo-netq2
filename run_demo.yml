@@ -1,88 +1,4 @@
 ---
-- hosts: network
-  become: yes
-  pre_tasks:
-    # To prevent unexpected problems, define the minimum Cumulus Linux
-    # Release supported by this demo.
-    - name: Verify Minimum Software Version
-      assert:
-        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
-        msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
-
-  tasks:
-    - name: Configured NTP in management VRF
-      command: "{{item}}"
-      with_items:
-        - sudo systemctl stop ntp.service
-        - sudo systemctl disable ntp.service
-        - sudo systemctl start ntp@mgmt
-        
-    - name: Enable FRR Zebra
-      lineinfile:
-        dest: /etc/frr/daemons
-        line: "zebra=yes"
-        regexp: "zebra="
-      notify: restart frr service
-
-    - name: Enable FRR BGP
-      lineinfile:
-        dest: /etc/frr/daemons
-        line: "bgpd=yes"
-        regexp: "bgpd="
-      notify: restart frr service
-
-    - name: Copy Interfaces File
-      copy:
-        src: configurations/{{ansible_hostname}}/interfaces
-        dest: /etc/network/interfaces
-        validate: ifup -a -s -i %s
-      notify: apply interface changes
-
-    - name: Copy Routing Configuration
-      copy:
-        src: configurations/{{ansible_hostname}}/frr.conf
-        dest: /etc/frr/frr.conf
-        validate: vtysh -C -f %s
-      notify: apply frr config
-
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb http://stage-repo3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
-        state: present
-        validate_certs: no
-
-    - name: Install NetQ
-      apt:
-        name: cumulus-netq
-        update_cache: yes
-
-    - name: Restart Rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-
-    - name: Add netq server IP
-      command: netq config add server 192.168.0.254 vrf mgmt
-
-    - name: Restart NetQ Agent
-      command: netq config agent restart
-
-  handlers:
-    - name: restart frr service
-      service:
-        name: frr
-        state: restarted
-
-    - name: apply interface changes
-      service:
-        name: networking
-        state: reloaded
-
-    - name: apply frr config
-      service:
-        name: frr
-        state: reloaded
-
 - hosts: servers
   become: yes
   tasks:
@@ -170,3 +86,87 @@
       service:
         name: lldpd
         state: restarted
+
+- hosts: network
+  become: yes
+  pre_tasks:
+    # To prevent unexpected problems, define the minimum Cumulus Linux
+    # Release supported by this demo.
+    - name: Verify Minimum Software Version
+      assert:
+        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
+        msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
+
+  tasks:
+    - name: Configured NTP in management VRF
+      command: "{{item}}"
+      with_items:
+        - sudo systemctl stop ntp.service
+        - sudo systemctl disable ntp.service
+        - sudo systemctl start ntp@mgmt
+        
+    - name: Enable FRR Zebra
+      lineinfile:
+        dest: /etc/frr/daemons
+        line: "zebra=yes"
+        regexp: "zebra="
+      notify: restart frr service
+
+    - name: Enable FRR BGP
+      lineinfile:
+        dest: /etc/frr/daemons
+        line: "bgpd=yes"
+        regexp: "bgpd="
+      notify: restart frr service
+
+    - name: Copy Interfaces File
+      copy:
+        src: configurations/{{ansible_hostname}}/interfaces
+        dest: /etc/network/interfaces
+        validate: ifup -a -s -i %s
+      notify: apply interface changes
+
+    - name: Copy Routing Configuration
+      copy:
+        src: configurations/{{ansible_hostname}}/frr.conf
+        dest: /etc/frr/frr.conf
+        validate: vtysh -C -f %s
+      notify: apply frr config
+
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://stage-repo3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
+        state: present
+        validate_certs: no
+
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq
+        update_cache: yes
+
+    - name: Restart Rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+
+    - name: Add netq server IP
+      command: netq config add server 192.168.0.254 vrf mgmt
+
+    - name: Restart NetQ Agent
+      command: netq config agent restart
+
+  handlers:
+    - name: restart frr service
+      service:
+        name: frr
+        state: restarted
+
+    - name: apply interface changes
+      service:
+        name: networking
+        state: reloaded
+
+    - name: apply frr config
+      service:
+        name: frr
+        state: reloaded
