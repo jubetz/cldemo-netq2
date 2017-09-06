@@ -121,12 +121,14 @@
 
     - name: Add Cumulus Apt Key
       apt_key:
-        url: "https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
+        url: "http://stage-repo3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
+        #url: "https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
         state: present
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
+        repo: deb    http://stage-repo3.cumulusnetworks.com/repos/deb xenial netq-1.1
+        #repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
         state: present
 
     - name: Install NetQ
@@ -151,10 +153,10 @@
         seconds: 5
 
     - name: Add netq server IP
-      command: netq add server 192.168.0.254
+      command: netq config add server 192.168.0.254
 
     - name: Restart NetQ Agent
-      command: netq agent restart
+      command: netq config agent restart
 
     - name: reboot
       command: /sbin/shutdown -r +1
