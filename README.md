@@ -80,7 +80,8 @@ From leaf01:
 * `netq check evpn`
 * `ip route show | netq resolve` to view the routing table with NetQ hostname resolution
 * `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101`
-```cumulus@leaf01:mgmt-vrf:~$ netq server03 show ip neighbors
+```
+cumulus@leaf01:mgmt-vrf:~$ netq server03 show ip neighbors
 Matching neighbor records are:
 IP Address       Hostname         Interface            Mac Address              VRF              Remote Last Changed
 ---------------- ---------------- -------------------- ------------------------ ---------------- ------ ----------------
@@ -90,7 +91,8 @@ IP Address       Hostname         Interface            Mac Address              
 192.168.0.254    server03         eth0                 44:38:39:00:00:5f        default          no     9m:57.746s
 ```
 * `netq trace 44:38:39:00:00:03 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
-```cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 from leaf03
+```
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 from leaf03
 leaf03 -- leaf03:vni13 -- leaf03:swp51 -- spine01:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
                                        -- spine01:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
                        -- leaf03:swp52 -- spine02:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
@@ -99,7 +101,8 @@ Path MTU is 1500
 ```
 
 On leaf01 misconfigure EVPN 
-```net del bgp l2vpn evpn advertise-all-vni
+```
+net del bgp l2vpn evpn advertise-all-vni
 net commit
 ```
 
@@ -121,7 +124,7 @@ Verify that EVPN is functional
 Now, on leaf01 shut down the link to spine01  
 `sudo ifdown swp51`
 
-Wait 10-30 seconds for NetQ to export the data.
+Wait 5-10 seconds for NetQ to export the data.
 
 With NetQ, check BGP again and you should see two failed sessions.  
 `netq check bgp`
@@ -132,7 +135,7 @@ Again, run the NetQ traceroute that was run earlier
 View the changes to the fabric as a result of shutting down the interface  
 `netq spine01 show changes between 1s and 5m` *note* the interface state on spine01 may not change because of the virtual environment, but the BGP peer will still fail.
 
-Next, from *spine02*:  
+Next, from **spine02**:  
 Change the MTU on the interface
 `net add interface swp3 mtu 9000`
 `net commit`
