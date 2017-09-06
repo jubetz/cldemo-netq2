@@ -16,7 +16,7 @@ Table of Contents
 * [Running the Demo](#running-the-demo)
     * [EVPN Demo](#evpn-demo)
     * [Docker Swarm   Routing on the Host Demo](#docker-swarm--routing-on-the-host-demo)
-* [Troubleshooting + FAQ](#troubleshooting-+-faq)
+* [Troubleshooting + FAQ](#troubleshooting--faq)
 
 
 Prerequisites
