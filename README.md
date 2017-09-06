@@ -155,7 +155,7 @@ Again, you can see the changes with `netq spine02 show changes between 1s and 5m
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
 
-If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run `vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04' then recreate a fresh environment with `vagrant up`
+If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run `vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04` then recreate a fresh environment with `vagrant up`
 
 ![Docker + Routing on the Host](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png)
 
@@ -185,8 +185,15 @@ Log into to Quagga on server01:
 
 
 Now use NetQ to verify Docker settings. On spine01:
+`netq show docker summary` to see the nodes with docker installed and brief information about them
 `netq show docker swarm cluster` to see the members of the cluster
-`netq show docker swarm network` to view the virtual swarm network
+`netq show docker swarm node` to view the the members of the cluster and their roles
+`netq show docker container network host` to view the containers with host networking, which shows the Quagga containers
+`netq show docker service` to view the currently running services (only apache_web in this demo)
+`netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity 
+`netq leaf02 show docker container adjacent interface swp1` to see the containers that are adjacent to the leaf02, swp1 interface (the containers deployed on server01)
+
+netq show docker container service apache_web changes
 
 
 Troubleshooting + FAQ
