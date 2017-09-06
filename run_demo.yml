@@ -45,11 +45,15 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://stage-repo3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
+        state: present    
+
     - name: Install NetQ
       apt:
         name: cumulus-netq
         update_cache: yes
-      register: install-netq
 
     - name: Restart Rsyslog
       service:
@@ -57,7 +61,7 @@
         state: restarted
 
     - name: Add netq server IP
-      command: netq add server 192.168.0.254 vrf mgmt
+      command: netq config add server 192.168.0.254 vrf mgmt
 
     - name: Restart NetQ Agent
       command: netq agent restart
