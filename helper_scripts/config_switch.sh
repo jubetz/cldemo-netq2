@@ -47,7 +47,7 @@ umount /tmp/foo
 sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
 net add vrf mgmt
-net commit
+(sleep 3 ; net commit) &
 
 echo "#################################"
 echo "   Finished"
