@@ -16,7 +16,7 @@ Table of Contents
 * [Running the Demo](#running-the-demo)
     * [EVPN Demo](#evpn-demo)
     * [Docker Swarm   Routing on the Host Demo](#docker-swarm--routing-on-the-host-demo)
-* [Troubleshooting](#troubleshooting)
+* [Troubleshooting + FAQ](#troubleshooting-+-faq)
 
 
 Prerequisites
@@ -139,7 +139,7 @@ Log into to Quagga on server01:
 * `exit` to log out of quagga
 
 
-Troubleshooting
+Troubleshooting + FAQ
 -------
 * The `Vagrantfile` expects the telemetry server to be named `cumulus/ts`. If you get the following error
 ```The box 'cumulus/ts' could not be found or
@@ -154,3 +154,9 @@ Error: The requested URL returned error: 404 Not Found
 Please ensure you have the telemetry server downloaded and installed in Vagrant. Use `vagrant box list` to see the current Vagrant box images you have installed.
 * `vagrant ssh` fails to network devices - This is expected, as each network device connects through the `oob-mgmt-server`. Use `vagrant ssh oob-mgmt-server` then ssh to the specific network device.
 * If you log into a switch and are prompted for the password for the `vagrant` user, issue the command `su - cumulus` to change to the cumulus user on the oob-mgmt-server
+* The Docker demo fails on server01 with an  error similar to the following
+```TASK [Deploy Apache Containers] ************************************************
+Wednesday 06 September 2017  03:03:56 +0000 (0:00:00.567)       0:00:44.092 ***
+fatal: [server01]: FAILED! => {"changed": true, "cmd": ["docker", "service", "create", "--name", "apache_web", "--replicas", "3", "--publish", "8080:80", "php:5.6-apache"], "delta": "0:00:02.673790", "end": "2017-09-06 03:03:58.934894", "failed": true, "rc": 1, "start": "2017-09-06 03:03:56.261104", "stderr": "Error response from daemon: rpc error: code = 3 desc = port '8080' is already in use by service 'apache_web' (vviesw72piif37ip8wplod2dn) as an ingress port", "stdout": "", "stdout_lines": [], "warnings": []}
+```
+The Docker playbook can only be run once without reprovisioning the environment. The error can be ignored. If you need to rebuild the environment, please `vagrant destroy` and then `vagrant up`
