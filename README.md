@@ -139,7 +139,7 @@ View the changes to the fabric as a result of shutting down the interface
 Next, from **spine02**:  
 Change the MTU on the interface
 ```
-net add interface swp3 mtu 9000`
+net add interface swp3 mtu 9000
 net commit
 ```
 
