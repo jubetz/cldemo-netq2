@@ -34,6 +34,9 @@ echo "This is a fake license" > /etc/cumulus/.license.txt
 
 ifreload -a
 
+# disabling LLDP to simplify docker demo
+systemctl stop lldpd.service
+systemcl disable lldpd.service
 
 echo "#################################"
 echo "   Finished "
