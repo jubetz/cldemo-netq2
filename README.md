@@ -193,7 +193,11 @@ Now use NetQ to verify Docker settings. On spine01:
 `netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity 
 `netq leaf02 show docker container adjacent interface swp1` to see the containers that are adjacent to the leaf02, swp1 interface (the containers deployed on server01)
 
-netq show docker container service apache_web changes
+Now, connect to **server03** and shut down the link to leaf04  
+`sudo ifdown eth2`
+
+Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network
+`netq leaf03 show impact docker service apache_web` 
 
 
 Troubleshooting + FAQ
