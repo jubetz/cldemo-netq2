@@ -33,3 +33,5 @@ exit 0
 EOT
 
 chmod +r /var/www/ztp.sh
+
+echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
