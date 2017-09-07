@@ -46,7 +46,6 @@ Running the Demo
 * `vagrant up oob-mgmt-server oob-mgmt-switch`
 * `vagrant up` (bringing up the oob-mgmt-server and switch first prevent DHCP issues)
 * `vagrant ssh oob-mgmt-server`
-* `sudo su - cumulus`
 
 ### EVPN Demo
 The first demo is based on BGP-EVPN with VxLAN Routing.
@@ -170,7 +169,7 @@ Within Docker Swarm, server01 acts as the _Swarm Master_ while server02, server0
 A container running Apache is deployed across three of the nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server  
-* `cd docker-roh` (roh for Routing On the Host)
+* `cd docker` (roh for Routing On the Host)
 * `ansible-playbook run_demo.yml`
 
 From server01:  
@@ -197,7 +196,7 @@ Now, connect to **server03** and shut down the link to leaf04
 `sudo ifdown eth2`
 
 Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network
-`netq leaf03 show impact docker service apache_web` 
+`netq leaf03 show impact docker service apache_web` The red indicates that removing leaf03 from service would bring down server03 and the attached containers
 
 
 Troubleshooting + FAQ
