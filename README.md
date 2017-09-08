@@ -61,12 +61,12 @@ Server02 has the IP `10.2.4.102`
 Server03 has the IP `10.1.3.103`  
 Server04 has the IP `10.2.4.104`  
 
-**To provision this demo**, from the oob-mgmt-server
+To provision this demo, from the **oob-mgmt-server**
 * `cd evpn`
 * `ansible-playbook run_demo.yml`
 
 After the playbook finishes, you can run a number of tests to view connectivity  
-From server01:
+From **server01**:
 * `ping 10.1.3.103` (server03)
 * `ping 10.2.4.104` (server04)
 * `traceroute 10.1.3.103`
@@ -74,11 +74,11 @@ From server01:
 
 Notice the path from server01 to server03 is direct, while server01 to server04 passes through an extra hop (the gateway at 10.1.3.1)
 
-From leaf01:
+From **leaf01**:
 * `netq check bgp`
 * `netq check evpn`
 * `ip route show | netq resolve` to view the routing table with NetQ hostname resolution
-* `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101`
+* `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101` (*note:* the MAC address you see may be different from these examples)
 ```
 cumulus@leaf01:mgmt-vrf:~$ netq server03 show ip neighbors
 Matching neighbor records are:
@@ -118,7 +118,7 @@ net add bgp l2vpn evpn advertise-all-vni
 net commit
 ```
 
-Verify that EVPN is functional  
+Verify that EVPN is functional (this may take up to 30 seconds)
 `netq check evpn`
 
 Now, on leaf01 shut down the link to spine01  
@@ -146,7 +146,8 @@ If we check BGP again, we still have only two failed sessions: leaf01 and spine0
 `netq check bgp`
 
 If we run the traceroute again, we will see the MTU failure in the path  
-`netq trace 44:38:39:00:00:03 from leaf03`
+`netq trace 44:38:39:00:00:03 from leaf03`  
+*If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
 
 Again, you can see the changes with `netq spine02 show changes between 1s and 5m`
 
