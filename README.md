@@ -183,7 +183,7 @@ Log into to Quagga on server01:
 * `exit` to log out of quagga
 
 
-Now use NetQ to verify Docker settings. On spine01:  
+Now use NetQ to verify Docker settings. On **spine01**:  
 `netq show docker summary` to see the nodes with docker installed and brief information about them  
 `netq show docker swarm cluster` to see the members of the cluster  
 `netq show docker swarm node` to view the the members of the cluster and their roles  
