@@ -183,13 +183,13 @@ Log into to Quagga on server01:
 * `exit` to log out of quagga
 
 
-Now use NetQ to verify Docker settings. On spine01:
-`netq show docker summary` to see the nodes with docker installed and brief information about them
-`netq show docker swarm cluster` to see the members of the cluster
-`netq show docker swarm node` to view the the members of the cluster and their roles
-`netq show docker container network host` to view the containers with host networking, which shows the Quagga containers
-`netq show docker service` to view the currently running services (only apache_web in this demo)
-`netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity 
+Now use NetQ to verify Docker settings. On spine01:  
+`netq show docker summary` to see the nodes with docker installed and brief information about them  
+`netq show docker swarm cluster` to see the members of the cluster  
+`netq show docker swarm node` to view the the members of the cluster and their roles  
+`netq show docker container network host` to view the containers with host networking, which shows the Quagga containers  
+`netq show docker service` to view the currently running services (only apache_web in this demo)  
+`netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity  
 `netq leaf02 show docker container adjacent interface swp1` to see the containers that are adjacent to the leaf02, swp1 interface (the containers deployed on server01)
 
 Now, connect to **server03** and shut down the link to leaf04  
