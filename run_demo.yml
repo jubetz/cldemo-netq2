@@ -10,7 +10,7 @@
     - name: Copy ansible.cfg
       copy: 
         src: ansible.cfg
-        dest: /home/cumulus/{{item}}/cldemo-netq/ansible.cfg
+        dest: /home/cumulus/cldemo-netq/{{item}}/ansible.cfg
       with_items:
         - evpn
         - docker
@@ -18,7 +18,7 @@
     - name: Copy Ansible hosts
       copy: 
         src: hosts
-        dest: /home/cumulus/{{item}}/cldemo-netq/hosts
+        dest: /home/cumulus/cldemo-netq/{{item}}/hosts
       with_items:
         - evpn
         - docker
