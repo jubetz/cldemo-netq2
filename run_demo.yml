@@ -47,9 +47,8 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb http://stage-repo3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
         state: present
-        validate_certs: no
 
     - name: Install NetQ
       apt:
@@ -116,14 +115,12 @@
 
     - name: Add Cumulus Apt Key
       apt_key:
-        url: "http://stage-repo3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
-        #url: "https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
+        url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb    http://stage-repo3.cumulusnetworks.com/repos/deb xenial netq-1.1
-        #repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
         update_cache: no
         state: present
 
