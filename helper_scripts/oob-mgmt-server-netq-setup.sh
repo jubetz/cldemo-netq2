@@ -1,7 +1,8 @@
 #!/bin/sh
-sudo su - cumulus -c '\
-git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo; \
-'
+# sudo su - cumulus -c '\
+# git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq/ evpn;
+# git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq/ docker; \
+# '
 
 cat << EOT > /var/www/ztp.sh
 #!/bin/bash
