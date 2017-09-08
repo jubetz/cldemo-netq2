@@ -37,7 +37,7 @@
 
     - name: Add Cumulus Apt Key
       apt_key:
-        url: "http://stage-repo3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
+        url: "http://stage-repo3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         #url: "https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey"
         state: present
 
