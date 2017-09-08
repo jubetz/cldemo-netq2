@@ -197,6 +197,21 @@ Now, connect to **server03** and shut down the link to leaf04
 
 Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network
 `netq leaf03 show impact docker service apache_web` The red indicates that removing leaf03 from service would bring down server03 and the attached containers
+```cumulus@server03:~$ netq leaf03 show impact docker service apache_web
+apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
+                                                                 -- leaf02
+           -- apache_web.3.mv1dtjeiveo6b9rjk83r1j0qe -- server02 -- leaf01
+                                                                 -- leaf02
+           -- apache_web.2.ao5423a8lea294mpli2qv6i0p -- server03 -- leaf03
+```
+
+Now, still on server03, run the Docker "hello world" example to create and destroy a container.  
+`sudo docker run --name test hello-world`  
+
+And view the changes to the container environment  
+`netq server03 show docker container changes`
+
+You will see `apache_web` (with trailing characters) from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
 
 
 Troubleshooting + FAQ
