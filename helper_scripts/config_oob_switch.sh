@@ -36,7 +36,7 @@ ifreload -a
 
 # disabling LLDP to simplify docker demo
 systemctl stop lldpd.service
-systemcl disable lldpd.service
+systemctl disable lldpd.service
 
 echo "#################################"
 echo "   Finished "
