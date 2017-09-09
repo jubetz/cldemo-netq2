@@ -13,6 +13,7 @@ Table of Contents
 * [Prerequisites](#prerequisites)
 * [Using Virtualbox](#using-virtualbox)
 * [Using Libvirt KVM](#using-libvirtkvm)
+* [Using Cumulus in the Cloud](#using-cumulus-in-the-cloud)
 * [Running the Demo](#running-the-demo)
     * [EVPN Demo](#evpn-demo)
     * [Docker Swarm   Routing on the Host Demo](#docker-swarm--routing-on-the-host-demo)
@@ -38,6 +39,26 @@ Using Libvirt+KVM
 * Install the Vagrant mutate plugin with `vagrant plugin install vagrant-mutate`
 * Convert the existing NetQ telemetry server box image to a libvirt compatible version. `vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
 * Rename the new Vagrant box image by changing the Vagrant directory name. `mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
+
+Using Cumulus in the Cloud
+------------------------
+After requesting a [Cumulus in the Cloud workbench](https://cumulusnetworks.com/try-for-free/), when you receive notice that it is provisioned, connect to the *oob-mgmt-server*
+
+Once connected run  
+`git clone -b citc https://github.com/CumulusNetworks/cldemo-netq`
+
+This will set the groundwork to copy the rest of the demo to your workbench.
+
+Next
+`cd cldemo-netq`
+`ansible-playbook setup.yml`
+
+You may receive a warning in pink that no inventory file could be found. This can be safely ignored.
+
+After Ansible finishes two new directories are created:  
+[evpn](#evpn-demo)
+[docker](#docker-swarm--routing-on-the-host-demo)
+
 
 Running the Demo
 ------------------------
