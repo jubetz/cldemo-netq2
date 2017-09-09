@@ -56,8 +56,10 @@ Next
 You may receive a warning in pink that no inventory file could be found. This can be safely ignored.
 
 After Ansible finishes two new directories are created:  
-[evpn](#evpn-demo)
+[evpn](#evpn-demo)  
 [docker](#docker-swarm--routing-on-the-host-demo)
+
+You can access either directory and follow the demo instructiosn below. 
 
 
 Running the Demo
