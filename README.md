@@ -59,7 +59,7 @@ After Ansible finishes two new directories are created:
 [evpn](#evpn-demo)  
 [docker](#docker-swarm--routing-on-the-host-demo)
 
-You can access either directory and follow the demo instructiosn below. 
+You can access either directory and follow the demo instructions below. 
 
 
 Running the Demo
