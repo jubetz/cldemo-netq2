@@ -49,8 +49,8 @@ Once connected run
 
 This will set the groundwork to copy the rest of the demo to your workbench.
 
-Next
-`cd cldemo-netq`
+Next  
+`cd cldemo-netq`  
 `ansible-playbook setup.yml`
 
 You may receive a warning in pink that no inventory file could be found. This can be safely ignored.
