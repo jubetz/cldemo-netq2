@@ -13,7 +13,7 @@ Table of Contents
 * [Prerequisites](#prerequisites)
 * [Using Virtualbox](#using-virtualbox)
 * [Using Libvirt KVM](#using-libvirtkvm)
-* [Using Cumulus in the Cloud](#using-cumulus-in-the-cloud)
+<!-- * [Using Cumulus in the Cloud](#using-cumulus-in-the-cloud) -->
 * [Running the Demo](#running-the-demo)
     * [EVPN Demo](#evpn-demo)
     * [Docker Swarm   Routing on the Host Demo](#docker-swarm--routing-on-the-host-demo)
@@ -40,6 +40,7 @@ Using Libvirt+KVM
 * Convert the existing NetQ telemetry server box image to a libvirt compatible version. `vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
 * Rename the new Vagrant box image by changing the Vagrant directory name. `mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
 
+<!--
 Using Cumulus in the Cloud
 ------------------------
 After requesting a [Cumulus in the Cloud workbench](https://cumulusnetworks.com/try-for-free/), when you receive notice that it is provisioned, connect to the *oob-mgmt-server*
@@ -60,7 +61,7 @@ After Ansible finishes two new directories are created:
 [docker](#docker-swarm--routing-on-the-host-demo)
 
 You can access either directory and follow the demo instructions below. 
-
+-->
 
 Running the Demo
 ------------------------
