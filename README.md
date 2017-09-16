@@ -191,7 +191,7 @@ After BGP is configured on the hosts, [Docker CE](https://www.docker.com/communi
 
 Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server03 and server04 act as _Swarm Workers_.
 
-A container running Apache is deployed across three of the nodes in the swarm.
+Swarm deploys an Apache service.  The service creates three apache containers which are deployed on various nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server  
 * `cd docker` (roh for Routing On the Host)
