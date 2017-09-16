@@ -189,7 +189,7 @@ Just as described in the Reference Topology diagram, each server is configured w
 After BGP is configured on the hosts, [Docker CE](https://www.docker.com/community-edition) is automatically installed and [Docker Swarm](https://docs.docker.com/engine/swarm/) is configured.
 
 
-Within Docker Swarm, server01 acts as the _Swarm Master_ while server02, server03 and server04 act as _Swarm Workers_.
+Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server03 and server04 act as _Swarm Workers_.
 
 A container running Apache is deployed across three of the nodes in the swarm.
 
