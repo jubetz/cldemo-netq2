@@ -191,7 +191,7 @@ After BGP is configured on the hosts, [Docker CE](https://www.docker.com/communi
 
 Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server03 and server04 act as _Swarm Workers_.
 
-Swarm deploys an Apache service.  The service creates three apache containers which are deployed on various nodes in the swarm.
+Swarm deploys an Apache service. The service creates three apache containers which are deployed on various nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server  
 * `cd docker` (roh for Routing On the Host)
@@ -222,7 +222,8 @@ Now, connect to **server03** and shut down the link to leaf04
 
 Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network
 `netq leaf03 show impact docker service apache_web` The red indicates that removing leaf03 from service would bring down server03 and the attached containers
-```cumulus@server03:~$ netq leaf03 show impact docker service apache_web
+```
+cumulus@server03:~$ netq leaf03 show impact docker service apache_web
 apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
                                                                  -- leaf02
            -- apache_web.3.mv1dtjeiveo6b9rjk83r1j0qe -- server02 -- leaf01
@@ -240,21 +241,25 @@ You will see `apache_web` (with trailing characters) from the Docker Swarm, `cum
 
 To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on. From **server01** run:  
 `sudo docker service scale apache_web=2`  
+
 This will change the environment from 3 apache_web containers to two.
 
 View the updated cluster with `netq show docker service` and notice that only 2 replicas are running.
-```cumulus@server01:~$ netq show docker service
+```
+cumulus@server01:~$ netq show docker service
 Matching service records are:
 Service Name    Manager    Cluster    Mode          Replicas  Running
 --------------  ---------  ---------  ----------  ----------  ---------
 apache_web      server01   default    Replicated           2  2
 ```
 
+
 Next, scale the swarm up to 4 containers. Still on **server01** run:  
 `sudo docker service scale apache_web=4`  
 
 Wait up to 30 seconds and see the cluster change  
-```cumulus@server01:~$ netq show docker service
+```
+cumulus@server01:~$ netq show docker service
 Matching service records are:
 Service Name    Manager    Cluster    Mode          Replicas  Running
 --------------  ---------  ---------  ----------  ----------  ---------
@@ -262,7 +267,8 @@ apache_web      server01   default    Replicated           4  4
 ```
 
 NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but two "Add" entries should exist)
-```cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
+```
+cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
 Matching container records are:
 Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
 -------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
@@ -273,7 +279,8 @@ apache_web.3.s470yqg server01   10.255.0.10       False    ingress        apache
 ```
 
 Going further back in time we can also see the cluster being scaled down
-```cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 10m
+```
+cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 10m
 Matching container records are:
 Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
 -------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
@@ -286,7 +293,8 @@ feozzjen732hplx8z7
 ```
 
 Finally, you can view the service in the past when only two instances were running
-```cumulus@server01:~$ netq show docker container service apache_web around 15m
+```
+cumulus@server01:~$ netq show docker container service apache_web around 15m
 Matching container records are:
 Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name    UpTime
 -------------------- ---------- ----------------- -------- -------------- --------------- ---------------
