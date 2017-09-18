@@ -238,6 +238,58 @@ And view the changes to the container environment
 
 You will see `apache_web` (with trailing characters) from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
 
+To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on. From **server01** run:  
+`sudo docker service scale apache_web=2`  
+This will change the environment from 3 apache_web containers to two.
+
+View the updated cluster with `netq show docker service` and notice that only 2 replicas are running.
+```cumulus@server01:~$ netq show docker service
+Matching service records are:
+Service Name    Manager    Cluster    Mode          Replicas  Running
+--------------  ---------  ---------  ----------  ----------  ---------
+apache_web      server01   default    Replicated           2  2```
+
+Next, scale the swarm up to 4 containers. Still on **server01** run:  
+`sudo docker service scale apache_web=4`  
+
+Wait up to 30 seconds and see the cluster change  
+```cumulus@server01:~$ netq show docker service
+Matching service records are:
+Service Name    Manager    Cluster    Mode          Replicas  Running
+--------------  ---------  ---------  ----------  ----------  ---------
+apache_web      server01   default    Replicated           4  4```
+
+NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but two "Add" entries should exist)
+```cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
+Matching container records are:
+Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
+-------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
+apache_web.4.lqxi3jo server03   10.255.0.9        False    ingress        apache_web     Add      2m:49.193s
+z7mbb60mm5dxrkkntt
+apache_web.3.s470yqg server01   10.255.0.10       False    ingress        apache_web     Add      3m:13.973s
+5n0q0lgtt0jg2ep6w5```
+
+Going further back in time we can also see the cluster being scaled down
+```cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 10m
+Matching container records are:
+Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
+-------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
+apache_web.4.lqxi3jo server03   10.255.0.9        False    ingress        apache_web     Add      4m:1.125s
+z7mbb60mm5dxrkkntt
+apache_web.3.s470yqg server01   10.255.0.10       False    ingress        apache_web     Add      4m:25.792s
+5n0q0lgtt0jg2ep6w5
+apache_web.3.y241cpk server01   10.255.0.9        False    ingress        apache_web     Del      8m:50.497s
+feozzjen732hplx8z7```
+
+Finally, you can view the service in the past when only two instances were running
+```cumulus@server01:~$ netq show docker container service apache_web around 15m
+Matching container records are:
+Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name    UpTime
+-------------------- ---------- ----------------- -------- -------------- --------------- ---------------
+apache_web.1.hbqiy94 server02   10.255.0.7        False    ingress        apache_web      0:27:26
+7e2h5dpnpybgqbqncw
+apache_web.2.vkiiim6 server04   10.255.0.8        False    ingress        apache_web      0:27:25```
+
 
 Troubleshooting + FAQ
 -------
