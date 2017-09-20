@@ -32,7 +32,7 @@ Prerequisites
 Using Virtualbox
 ------------------------
 * Add the downloaded box to vagrant via: `vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts`  
-**Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1)
+**Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1&hypervisor=Vagrant)
 
 Using Libvirt+KVM
 ------------------------
