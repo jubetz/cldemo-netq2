@@ -126,7 +126,7 @@ Path MTU is 1500
 
 On leaf01 misconfigure EVPN 
 ```
-net del bgp l2vpn evpn advertise-all-vni
+net del bgp evpn advertise-all-vni
 net commit
 ```
 
@@ -139,7 +139,7 @@ And that EVPN is misconfigured
 
 Correct the EVPN misconfiguration
 ```
-net add bgp l2vpn evpn advertise-all-vni
+net add bgp evpn advertise-all-vni
 net commit
 ```
 
