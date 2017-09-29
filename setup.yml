@@ -22,3 +22,45 @@
       with_items:
         - evpn
         - docker
+
+    - name: Configure Standard OOB Networking
+      copy:
+        src: interfaces
+        dest: /etc/network/interfaces
+        backup: yes
+      register: apply networking
+
+    - name: Change NetQ IP
+      lineinfile:
+        path: /etc/netq/netq.yml
+        regexp: "server: 10.1.3.11"
+        line: "server: 192.168.0.254"
+      register: restart ts
+
+  handlers:
+    - name: apply networking
+      command: ifreload -a
+
+    - name: restart ts
+      service: sudo systemctl restart netq-appliance.service
+
+
+- hosts: network
+  tasks:
+    - name: Change NetQ IP
+        path: /etc/netq/netq.yml
+        regexp: "server: 10.1.3.11"
+        line: "server: 192.168.0.254"
+
+    - name: Set NetQ config to mgmt vrf
+        path: /etc/netq/netq.yml
+        regexp: "vrf: default"
+        line: "vrf: mgmt"
+
+    - name: Move NetQ service to Mgmt VRF
+      command: "{{item}}"
+      with_items:
+        - sudo systemctl stop netqd.service
+        - sudo systemctl disable netqd.service
+        - sudo systemctl enable netqd@mgmt.service
+        - sudo systemctl start netqd@mgmt.service
