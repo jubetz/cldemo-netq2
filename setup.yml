@@ -2,10 +2,10 @@
 - hosts: localhost
   tasks:
     - name: Clone EVPN Demo
-      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq evpn
+      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
     
     - name: Clone Docker Demo
-      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq docker
+      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker
 
     - name: Copy ansible.cfg
       copy: 
