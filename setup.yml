@@ -66,7 +66,7 @@
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
       with_items:
-        - sudo systemctl stop netqd.service
-        - sudo systemctl disable netqd.service
-        - sudo systemctl enable netqd@mgmt.service
-        - sudo systemctl start netqd@mgmt.service
+        - systemctl stop netqd.service
+        - systemctl disable netqd.service
+        - systemctl enable netqd@mgmt.service
+        - systemctl start netqd@mgmt.service
