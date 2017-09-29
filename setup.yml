@@ -83,6 +83,10 @@
 - hosts: servers
   become: yes
   tasks:
+    - name: Install NTP
+      apt:
+        name: ntp
+
     - name: Restart NetQ
       service: 
         name: netq-agent
