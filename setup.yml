@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  become: yes
   tasks:
     - name: Clone EVPN Demo
       command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
@@ -48,6 +49,7 @@
 
 
 - hosts: network
+  become: yes
   tasks:
     - name: Change NetQ IP
       lineinfile:
