@@ -42,7 +42,9 @@
       command: ifreload -a
 
     - name: restart ts
-      service: sudo systemctl restart netq-appliance.service
+      service: 
+        name: netq-appliance.service
+        state: restarted
 
 
 - hosts: network
