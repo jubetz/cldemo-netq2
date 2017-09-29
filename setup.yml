@@ -35,8 +35,8 @@
     - name: Change NetQ IP
       lineinfile:
         path: /etc/netq/netq.yml
-        regexp: "server: 10.1.3.11"
-        line: "server: 192.168.0.254"
+        regexp: "  server: 10.1.3.11"
+        line: "  server: 192.168.0.254"
         backup: yes
         backrefs: yes
       become: yes
@@ -60,16 +60,16 @@
     - name: Change NetQ IP
       lineinfile:
         path: /etc/netq/netq.yml
-        regexp: "server: 10.1.3.11"
-        line: "server: 192.168.0.254"
+        regexp: "  server: 10.1.3.11"
+        line: "  server: 192.168.0.254"
         backup: yes
         backrefs: yes
 
     - name: Set NetQ config to mgmt vrf
       lineinfile:
         path: /etc/netq/netq.yml
-        regexp: "vrf: default"
-        line: "vrf: mgmt"
+        regexp: "  vrf: default"
+        line: "  vrf: mgmt"
         backup: yes
         backrefs: yes
 
@@ -77,6 +77,10 @@
       command: "{{item}}"
       with_items:
         - systemctl stop netqd.service
+        - systemctl stop netq-agent.service
         - systemctl disable netqd.service
+        - systemctl disable netq-agent.service
         - systemctl enable netqd@mgmt.service
+        - systemctl enable netq-agent@mgmt.service
         - systemctl start netqd@mgmt.service
+        - systemctl start netq-agent@mgmt.service
