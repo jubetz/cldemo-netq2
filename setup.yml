@@ -54,7 +54,7 @@
       become: yes
 
 
-- hosts: network
+- hosts: network,servers
   become: yes
   tasks:
     - name: Change NetQ IP
@@ -65,14 +65,7 @@
         backup: yes
         backrefs: yes
 
-    - name: Set NetQ config to mgmt vrf
-      lineinfile:
-        path: /etc/netq/netq.yml
-        regexp: "  vrf: default"
-        line: "  vrf: mgmt"
-        backup: yes
-        backrefs: yes
-
+- hosts: network
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
       with_items:
@@ -84,3 +77,11 @@
         - systemctl enable netq-agent@mgmt.service
         - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
+
+- hosts: servers
+  become: yes
+  tasks:
+    - name: Restart NetQ
+      service: 
+        name: netq-agent
+        state: restarted
