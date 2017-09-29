@@ -1,6 +1,5 @@
 ---
 - hosts: localhost
-  become: yes
   tasks:
     - name: Clone EVPN Demo
       command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
@@ -29,7 +28,9 @@
         src: interfaces
         dest: /etc/network/interfaces
         backup: yes
+      become: yes
       notify: apply networking
+
 
     - name: Change NetQ IP
       lineinfile:
@@ -38,16 +39,19 @@
         line: "server: 192.168.0.254"
         backup: yes
         backrefs: yes
+      become: yes
       notify: restart ts
 
   handlers:
     - name: apply networking
       command: ifreload -a
+      become: yes
 
     - name: restart ts
       service: 
         name: netq-appliance.service
         state: restarted
+      become: yes
 
 
 - hosts: network
