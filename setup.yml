@@ -66,6 +66,8 @@
         backrefs: yes
 
 - hosts: network
+  become: yes
+  tasks:
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
       with_items:
