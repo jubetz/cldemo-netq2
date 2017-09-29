@@ -29,14 +29,16 @@
         src: interfaces
         dest: /etc/network/interfaces
         backup: yes
-      register: apply networking
+      notify: apply networking
 
     - name: Change NetQ IP
       lineinfile:
         path: /etc/netq/netq.yml
         regexp: "server: 10.1.3.11"
         line: "server: 192.168.0.254"
-      register: restart ts
+        backup: yes
+        backrefs: yes
+      notify: restart ts
 
   handlers:
     - name: apply networking
@@ -56,12 +58,16 @@
         path: /etc/netq/netq.yml
         regexp: "server: 10.1.3.11"
         line: "server: 192.168.0.254"
+        backup: yes
+        backrefs: yes
 
     - name: Set NetQ config to mgmt vrf
       lineinfile:
         path: /etc/netq/netq.yml
         regexp: "vrf: default"
         line: "vrf: mgmt"
+        backup: yes
+        backrefs: yes
 
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
