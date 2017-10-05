@@ -22,6 +22,7 @@ iface eth2 inet manual
 
 auto uplink
 iface uplink inet static
+  mtu 9000
   bond-slaves none
   bond-mode 802.3ad
   bond-miimon 100
