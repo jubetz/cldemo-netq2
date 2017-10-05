@@ -38,7 +38,6 @@ iface swp2
 auto swp49
 iface swp49
   alias to Leaf01
-  mtu 9216
   # This is required for Vagrant only
   post-up ip link set swp49 promisc on
 
