@@ -34,6 +34,7 @@ iface swp2
 # Port to Leaf04
 auto swp49
 iface swp49
+  mtu 9000
   alias to Leaf04
 
 # Port to Leaf04
