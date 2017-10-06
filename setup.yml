@@ -87,7 +87,19 @@
       apt:
         name: ntp
 
+    - name: Disable FRR
+      copy:
+        src: daemons
+        dest: /etc/frr/daemons
+      notify: restart frr
+
     - name: Restart NetQ
       service: 
         name: netq-agent
+        state: restarted
+
+  handlers:
+    - name: restart frr
+      service: 
+        name: frr.service
         state: restarted
