@@ -51,16 +51,19 @@ iface swp50
 # Port to Spine01
 auto swp51
 iface swp51
+  mtu 9216
   alias to Spine01
 
 # Port to Spine02
 auto swp52
 iface swp52
+  mtu 9216
   alias to Spine02
 
 # CLAG Peerlink bond
 auto peerlink
 iface peerlink
+  mtu 9000
   bond-slaves swp49 swp50
 
 # CLAG Peerlink L2 interface.
@@ -77,6 +80,7 @@ iface peerlink.4094
 # Bond to Server03
 auto bond03
 iface bond03
+  mtu 9000
   bond-slaves swp1
   bridge-access 13
   clag-id 3
@@ -84,6 +88,7 @@ iface bond03
 # Bond to Server04
 auto bond04
 iface bond04
+  mtu 9000
   bond-slaves swp2
   bridge-access 24
   clag-id 4
@@ -101,6 +106,7 @@ iface bridge
 # VxLAN Tunnel for Server1-Server3 (Vlan 13)
 auto vni13
 iface vni13
+  mtu 9000
   vxlan-id 13
   vxlan-local-tunnelip 10.0.0.14
   bridge-access 13
@@ -111,6 +117,7 @@ iface vni13
 #VxLAN Tunnel for Server2-Server4 (Vlan 24)
 auto vni24
 iface vni24
+  mtu 9000
   vxlan-id 24
   vxlan-local-tunnelip 10.0.0.14
   bridge-access 24
