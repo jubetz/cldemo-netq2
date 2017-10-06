@@ -23,38 +23,46 @@ iface mgmt
 auto swp1
 iface swp1
   alias to Leaf01
+  mtu 9000
 
 # Port to Leaf02
 auto swp2
 iface swp2
   alias to Leaf02
+  mtu 9000
 
 # Port to Leaf03
 auto swp3
 iface swp3
   alias to Leaf03
+  mtu 9000
 
 # Port to Leaf04
 auto swp4
 iface swp4
   alias to Leaf04
+  mtu 9000
 
 # Port to Exit01
 auto swp29
 iface swp29
   alias to Exit01
+  mtu 9000
 
 # Port to Exit02
 auto swp30
 iface swp30
   alias to Exit02
+  mtu 9000
 
 # Port to Spine02
 auto swp31
 iface swp31
   alias to Spine02
+  mtu 9000
 
 # Port to Spine02
 auto swp32
 iface swp32
   alias to Spine02
+  mtu 9000
