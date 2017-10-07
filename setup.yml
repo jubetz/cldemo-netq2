@@ -3,10 +3,12 @@
   tasks:
     - name: Clone EVPN Demo
       command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
-    
+      ignore_errors: true
+
     - name: Clone Docker Demo
       command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker
-
+      ignore_errors: true
+      
     - name: Copy ansible.cfg
       copy: 
         src: ansible.cfg
