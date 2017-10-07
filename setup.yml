@@ -109,6 +109,17 @@
 - hosts: servers
   become: yes
   tasks:
+    - name: Uninstall Mesos demo
+      apt:
+        name: "{{item}}"
+        state: absent
+        autoremove: yes
+      with_items:
+        - mesos
+        - zookeeper
+        - chronos
+        - marathon
+
     - name: Fix CITC bonds
       blockinfile:
         path: /etc/rc.local
