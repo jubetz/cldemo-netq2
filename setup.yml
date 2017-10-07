@@ -80,7 +80,7 @@
         - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
 
-- hosts: servers
+- hosts: servers,localhost
   become: yes
   tasks:
     - name: Install NTP
