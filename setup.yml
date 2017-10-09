@@ -20,26 +20,29 @@
 
     - name: Clone EVPN Demo
       command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
-      when: evpn.stat.isdir is defined
+      when: evpn.stat.isdir is not defined
 
     - name: Clone Docker Demo
       command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker
-      when: docker.stat.isdir is defined
+      when: docker.stat.isdir is not defined
 
     - name: Create Ansible Directory
       file:
         path: /etc/ansible
         state: directory
+      become: yes
 
     - name: Copy ansible.cfg
       copy: 
         src: files/ansible.cfg
         dest: /etc/ansible/ansible.cfg
+      become: yes
 
     - name: Copy Ansible hosts
       copy: 
         src: hosts
         dest: /etc/ansible/hosts
+      become: yes
 
     - name: Configure Standard OOB Networking
       copy:
