@@ -1,29 +1,45 @@
 ---
 - hosts: localhost
   tasks:
+
+    - name: Check if the EVPN demo is already cloned
+      stat: 
+        path: /home/cumulus/cldemo-netq/evpn
+        get_attributes: no
+        get_checksum: no
+        get_md5: no
+      register: evpn
+
+    - name: Check if Docker demo is already cloned
+      stat: 
+        path: /home/cumulus/cldemo-netq/docker-roh 
+        get_attributes: no
+        get_checksum: no
+        get_md5: no
+      register: docker
+
     - name: Clone EVPN Demo
       command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
-      ignore_errors: true
+      when: evpn.stat.isdir is defined
 
     - name: Clone Docker Demo
       command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker
-      ignore_errors: true
-      
+      when: docker.stat.isdir is defined
+
+    - name: Create Ansible Directory
+      file:
+        path: /etc/ansible
+        state: directory
+
     - name: Copy ansible.cfg
       copy: 
-        src: ansible.cfg
+        src: files/ansible.cfg
         dest: /etc/ansible/ansible.cfg
-      with_items:
-        - evpn
-        - docker
 
     - name: Copy Ansible hosts
       copy: 
         src: hosts
         dest: /etc/ansible/hosts
-      with_items:
-        - evpn
-        - docker
 
     - name: Configure Standard OOB Networking
       copy:
