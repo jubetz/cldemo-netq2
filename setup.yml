@@ -1,7 +1,14 @@
 ---
 - hosts: localhost
-  tasks:
+  pre_tasks:
+    # To prevent unexpected problems, define the minimum Cumulus Linux
+    # Release supported by this demo.
+    - name: Verify Minimum Software Version
+      assert:
+        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
+        msg: "You appear to be running an older workbench. Please delete your current workbench by adding '/delete' to your workbench URL and request a new one."
 
+  tasks:
     - name: Check if the EVPN demo is already cloned
       stat: 
         path: /home/cumulus/cldemo-netq/evpn
