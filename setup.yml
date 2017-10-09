@@ -12,7 +12,7 @@
 
     - name: Check if Docker demo is already cloned
       stat: 
-        path: /home/cumulus/cldemo-netq/docker-roh 
+        path: /home/cumulus/cldemo-netq/docker
         get_attributes: no
         get_checksum: no
         get_md5: no
