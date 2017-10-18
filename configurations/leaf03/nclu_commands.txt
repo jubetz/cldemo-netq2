@@ -3,6 +3,8 @@ net commit
 
 net add vxlan vni13,24 vxlan local-tunnelip 10.0.0.13
 net add interface swp49-50 alias to Leaf04
+net add interface swp51-52 mtu 9216
+net add vxlan vni13,24 mtu 9000
 net add vxlan vni13,24 bridge learning off
 net add loopback lo ip address 10.0.0.13/32
 net add loopback lo clag vxlan-anycast-ip 10.0.0.134
@@ -15,6 +17,9 @@ net add interface swp49 post-up ip link set swp49 promisc on
 net add interface swp50 post-up ip link set swp50 promisc on
 net add interface swp51 alias to Spine01
 net add interface swp52 alias to Spine02
+net add bond bond03 mtu 9000
+net add bond bond04 mtu 9000
+net add bond peerlink mtu 9000
 net add bond bond03 bond slaves swp1
 net add bond bond03 bridge access 13
 net add bond bond03 clag id 3
