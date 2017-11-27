@@ -83,7 +83,7 @@
       command: "{{item}}"
       with_items:
         - net add vrf mgmt
-        - net commit
+        - sleep 2 && net commit
       ignore_errors: yes
       async: 0
       poll: 0
