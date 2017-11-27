@@ -154,6 +154,7 @@
         line: "  server: 192.168.0.254"
         backup: yes
         backrefs: yes
+      register: NetQchanged
 
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
@@ -166,6 +167,7 @@
         - systemctl enable netq-agent@mgmt.service
         - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
+      when: NetQchanged.changed
 
 # - hosts: servers
 #   become: yes
