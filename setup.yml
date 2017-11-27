@@ -84,10 +84,21 @@
       with_items:
         - net add vrf mgmt
         - sleep 2 && net commit
-      ignore_errors: yes
-      async: 0
+      async: 1
       poll: 0
       when: vrf.stdout != "mgmt"
+
+    - name: Management VRF enabled, wait to reconnect
+      wait_for_connection:
+        timeout: 30
+        connect_timeout: 1
+      # local_action:
+      #   wait_for:
+      #     host: "{{ ansible_default_ipv4.address }}"
+      #     port: "{{ ansible_port }}"
+      #     state: started
+      #     delay: 5
+      #     timeout: 30
 
 - hosts: servers
   become: yes
