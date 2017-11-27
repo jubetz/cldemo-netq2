@@ -91,10 +91,6 @@
         - net commit
       ignore_errors: yes
 
-- hosts: network
-  become: yes
-  tasks:
-      -
 - hosts: network,servers
   become: yes
   tasks:
