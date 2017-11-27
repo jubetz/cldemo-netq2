@@ -5,7 +5,7 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
+        that: "{{ ansible_lsb.release | version_compare('3.4', '>=') }}"
         msg: "You appear to be running an older workbench. Please delete your current workbench by adding '/delete' to your workbench URL and request a new one."
 
   tasks:
@@ -80,7 +80,7 @@
       register: vrf
 
     - name: Enable management VRF
-      command: "{{item}}"
+      command: "{{ item }}"
       with_items:
         - net add vrf mgmt
         - net commit
@@ -155,7 +155,7 @@
       command: netq config add server 192.168.0.254 vrf mgmt
 
     - name: Move NetQ service to Mgmt VRF
-      command: "{{item}}"
+      command: "{{ item }}"
       with_items:
         - systemctl stop netqd.service
         - systemctl stop netq-agent.service
