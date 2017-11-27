@@ -47,18 +47,9 @@
 
     - name: Copy Ansible hosts
       copy:
-        src: hosts
+        src: files/hosts
         dest: /etc/ansible/hosts
       become: yes
-
-    - name: Configure Standard OOB Networking
-      copy:
-        src: interfaces
-        dest: /etc/network/interfaces
-        backup: yes
-      become: yes
-      notify: apply networking
-
 
     - name: Change NetQ IP
       lineinfile:
@@ -91,7 +82,63 @@
         - net commit
       ignore_errors: yes
 
-- hosts: network,servers
+
+- hosts: servers
+  become: yes
+  tasks:
+    - name: Add Cumulus Apt Key
+      apt_key:
+        url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
+        state: present
+
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
+        state: present
+
+    - name: Install cumulus-netq
+      apt:
+        name: cumulus-netq
+        update_cache: yes
+      register: install-netq
+
+    - name: Install NTP
+      apt:
+        name: ntp
+        update_cache: no
+        register: install-ntp
+
+    - name: Enable NTP
+      service:
+        name: ntp
+        enabled: yes
+        state: started
+      when: install-ntp.changed
+
+    - name: Restart Rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+      when: install-netq.changed
+
+    - name: Start NetQ Service on Servers
+      service:
+        name: netqd
+        enabled: yes
+        state: started
+
+    - name: Add netq server IP
+      command: netq config add server 192.168.0.254
+
+    - name: Start Netq Service Again
+      command: netq config agent restart
+
+    - name: Check that the agent is running
+      command: netq agent status
+      register: status
+      failed_when: "'Stopped.' in status.stdout"
+
+- hosts: network
   become: yes
   tasks:
     - name: Change NetQ IP
@@ -102,9 +149,6 @@
         backup: yes
         backrefs: yes
 
-- hosts: network
-  become: yes
-  tasks:
     - name: Move NetQ service to Mgmt VRF
       command: "{{item}}"
       with_items:
