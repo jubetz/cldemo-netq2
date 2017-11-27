@@ -87,11 +87,13 @@
       async: 1
       poll: 0
       when: vrf.stdout != "mgmt"
+      register: mgmtVRF
 
     - name: Management VRF enabled, wait to reconnect
       wait_for_connection:
         timeout: 30
         delay: 5
+      when: mgmtVRF.changed
 
 - hosts: servers
   become: yes
