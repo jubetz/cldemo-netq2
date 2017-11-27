@@ -151,8 +151,15 @@
 - hosts: network
   become: yes
   tasks:
+
+    - name: Check if NetQ is configured
+      command: netq check agents
+      ignore_errors: true
+      register: agents
+
     - name: Configure NetQ server
       command: netq config add server 192.168.0.254 vrf mgmt
+      when: agents.rc != 0
 
     - name: Move NetQ service to Mgmt VRF
       command: "{{ item }}"
@@ -165,6 +172,7 @@
         - systemctl enable netq-agent@mgmt.service
         - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
+      when: agents.rc != 0
 
 # - hosts: servers
 #   become: yes
