@@ -89,10 +89,12 @@
       with_items:
         - net add vrf mgmt
         - net commit
-      async: 0
-      poll: 0
-      ignore_errors: true
+      ignore_errors: yes
 
+- hosts: network
+  become: yes
+  tasks:
+      -
 - hosts: network,servers
   become: yes
   tasks:
