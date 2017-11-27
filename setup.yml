@@ -166,7 +166,7 @@
         - systemctl disable netqd.service
         - systemctl enable netqd@mgmt.service
         - systemctl start netqd@mgmt.service
-    when: agents.rc != 0
+      when: agents.rc != 0
 
     - name: Configure NetQ server
       command: netq config add server 192.168.0.254 vrf mgmt
