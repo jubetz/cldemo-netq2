@@ -41,13 +41,13 @@
 
     - name: Copy ansible.cfg
       copy:
-        src: files/ansible.cfg
+        src: ansible.cfg
         dest: /etc/ansible/ansible.cfg
       become: yes
 
     - name: Copy Ansible hosts
       copy:
-        src: files/hosts
+        src: hosts
         dest: /etc/ansible/hosts
       become: yes
 
