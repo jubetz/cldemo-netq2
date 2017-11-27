@@ -106,7 +106,7 @@
       apt:
         name: ntp
         update_cache: no
-        register: install-ntp
+      register: install-ntp
 
     - name: Enable NTP
       service:
