@@ -80,7 +80,7 @@
       register: vrf
 
     - name: Enable management VRF
-      command: "{{item}}"
+      shell: "{{item}}"
       with_items:
         - net add vrf mgmt
         - sleep 2 && net commit
