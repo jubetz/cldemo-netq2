@@ -159,20 +159,25 @@
       ignore_errors: true
       register: agents
 
+    - name: Move Netqd.service to management VRF
+      command: " {{ item }}"
+      with_items:
+        - systemctl stop netqd.service
+        - systemctl disable netqd.service
+        - systemctl enable netqd@mgmt.service
+        - systemctl start netqd@mgmt.service
+    when: agents.rc != 0
+
     - name: Configure NetQ server
       command: netq config add server 192.168.0.254 vrf mgmt
       when: agents.rc != 0
 
-    - name: Move NetQ service to Mgmt VRF
+    - name: Move NetQ agent service to Mgmt VRF
       command: "{{ item }}"
       with_items:
-        - systemctl stop netqd.service
         - systemctl stop netq-agent.service
-        - systemctl disable netqd.service
         - systemctl disable netq-agent.service
-        - systemctl enable netqd@mgmt.service
         - systemctl enable netq-agent@mgmt.service
-        - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
       when: agents.rc != 0
 
