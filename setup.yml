@@ -75,13 +75,19 @@
 - hosts: network
   become: yes
   tasks:
+    - name: Check if management VRF is enabled
+      command: ip vrf identify
+      register: vrf
+
     - name: Enable management VRF
       command: "{{item}}"
       with_items:
         - net add vrf mgmt
         - net commit
       ignore_errors: yes
-
+      async: 0
+      poll: 0
+      when: vrf.stdout != "mgmt"
 
 - hosts: servers
   become: yes
