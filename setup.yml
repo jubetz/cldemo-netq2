@@ -10,7 +10,7 @@
 
   tasks:
     - name: Check if the EVPN demo is already cloned
-      stat: 
+      stat:
         path: /home/cumulus/cldemo-netq/evpn
         get_attributes: no
         get_checksum: no
@@ -18,7 +18,7 @@
       register: evpn
 
     - name: Check if Docker demo is already cloned
-      stat: 
+      stat:
         path: /home/cumulus/cldemo-netq/docker
         get_attributes: no
         get_checksum: no
@@ -40,13 +40,13 @@
       become: yes
 
     - name: Copy ansible.cfg
-      copy: 
+      copy:
         src: files/ansible.cfg
         dest: /etc/ansible/ansible.cfg
       become: yes
 
     - name: Copy Ansible hosts
-      copy: 
+      copy:
         src: hosts
         dest: /etc/ansible/hosts
       become: yes
@@ -76,11 +76,22 @@
       become: yes
 
     - name: restart ts
-      service: 
+      service:
         name: netq-appliance.service
         state: restarted
       become: yes
 
+- hosts: network
+  become: yes
+  tasks:
+    - name: Enable management VRF
+      command: "{{item}}"
+      with_items:
+        - net add vrf mgmt
+        - net commit
+      async: 0
+      poll: 0
+      ignore_errors: true
 
 - hosts: network,servers
   become: yes
@@ -108,48 +119,14 @@
         - systemctl start netqd@mgmt.service
         - systemctl start netq-agent@mgmt.service
 
-- hosts: servers,localhost
-  become: yes
-  tasks:
-    - name: Install NTP
-      apt:
-        name: ntp
+# - hosts: servers
+#   become: yes
+#   tasks:
 
-    - name: Disable FRR
-      copy:
-        src: daemons
-        dest: /etc/frr/daemons
-      notify: restart frr
-
-    - name: Restart NetQ
-      service: 
-        name: netq-agent
-        state: restarted
-
-  handlers:
-    - name: restart frr
-      service: 
-        name: frr.service
-        state: restarted
-
-- hosts: servers
-  become: yes
-  tasks:
-    - name: Uninstall Mesos demo
-      apt:
-        name: "{{item}}"
-        state: absent
-        autoremove: yes
-      with_items:
-        - mesos
-        - zookeeper
-        - chronos
-        - marathon
-
-    - name: Fix CITC bonds
-      blockinfile:
-        path: /etc/rc.local
-        block: |
-          /sbin/ethtool -s eth1 speed 1000 duplex full
-          /sbin/ethtool -s eth2 speed 1000 duplex full
-          systemctl restart networking
+#     - name: Fix CITC bonds
+#       blockinfile:
+#         path: /etc/rc.local
+#         block: |
+#           /sbin/ethtool -s eth1 speed 1000 duplex full
+#           /sbin/ethtool -s eth2 speed 1000 duplex full
+#           systemctl restart networking
