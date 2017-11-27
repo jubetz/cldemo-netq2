@@ -100,26 +100,26 @@
       apt:
         name: cumulus-netq
         update_cache: yes
-      register: install-netq
+      register: installNetQ
 
     - name: Install NTP
       apt:
         name: ntp
         update_cache: no
-      register: install-ntp
+      register: installNTP
 
     - name: Enable NTP
       service:
         name: ntp
         enabled: yes
         state: started
-      when: install-ntp.changed
+      when: installNTP.changed
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
-      when: install-netq.changed
+      when: installNetQ.changed
 
     - name: Start NetQ Service on Servers
       service:
