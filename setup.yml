@@ -121,9 +121,10 @@
     - name: Install LLDP, traceroute
       apt:
         name: "{{ item }}"
-        with_items:
-          - lldpd
-          - traceroute
+        state: installed
+      with_items:
+        - lldpd
+        - traceroute
         update_cache: no
 
     - name: Install NTP
