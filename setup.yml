@@ -181,6 +181,19 @@
         - systemctl start netq-agent@mgmt.service
       when: agents.rc != 0
 
+    - name: Locate where NTP is running
+      shell: ps -u ntp | grep -v PID | awk '{print $1}' | ip vrf identify
+      register: ntp_location
+
+    - name: Move NTP to Mgmt VRF
+      command: " {{ item }} "
+      with_items:
+        - systemctl stop ntp.service
+        - systemctl disable ntp.service
+        - systemctl start ntp@mgmt.service
+        - systemctl enable ntp@mgmt.service
+      when: ntp_location.rc != 0
+
 # - hosts: servers
 #   become: yes
 #   tasks:
