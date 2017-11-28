@@ -122,10 +122,11 @@
       apt:
         name: "{{ item }}"
         state: installed
+        update_cache: no
       with_items:
         - lldpd
         - traceroute
-        update_cache: no
+
 
     - name: Install NTP
       apt:
