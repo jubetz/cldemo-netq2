@@ -94,7 +94,9 @@
     - name: Verify Minimum Software Version
       assert:
         that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
-        msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
+        msg: >
+          "Cumulus Linux version must be 3.4 or later.
+          Version {{ansible_lsb.release}} detected"
 
   tasks:
     - name: Configured NTP in management VRF
@@ -134,7 +136,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1  # yamllint disable-line rule:line-length
         state: present
         update_cache: no
 
