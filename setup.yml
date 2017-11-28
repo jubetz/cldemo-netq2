@@ -6,7 +6,11 @@
     - name: Verify Minimum Software Version
       assert:
         that: "{{ ansible_lsb.release | version_compare('3.4', '>=') }}"
-        msg: "You appear to be running an older workbench. Please delete your current workbench by adding '/delete' to your workbench URL and request a new one."
+        msg: >
+          "You appear to be running an older workbench.
+          Please delete your current workbench by adding '/delete' to your
+          workbench URL and request a new one."
+
 
   tasks:
     - name: Check if the EVPN demo is already cloned
@@ -26,11 +30,11 @@
       register: docker
 
     - name: Clone EVPN Demo
-      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn
+      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn  # yamllint disable-line rule:line-length
       when: evpn.stat.isdir is not defined
 
     - name: Clone Docker Demo
-      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker
+      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker  # yamllint disable-line rule:line-length
       when: docker.stat.isdir is not defined
 
     - name: Create Ansible Directory
@@ -187,7 +191,7 @@
       when: agents.rc != 0
 
     - name: Locate where NTP is running
-      shell:  ip vrf identify $(ps -u ntp | grep -v PID | awk '{print $1}')
+      shell: ip vrf identify $(ps -u ntp | grep -v PID | awk '{print $1}')
       register: ntp_location
 
     - name: Move NTP to Mgmt VRF
