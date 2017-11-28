@@ -114,6 +114,11 @@
         update_cache: yes
       register: installNetQ
 
+    - name: Install LLDP
+      apt:
+        name: lldpd
+        update_cache: no
+
     - name: Install NTP
       apt:
         name: ntp
