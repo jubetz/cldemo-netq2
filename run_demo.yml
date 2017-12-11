@@ -196,7 +196,7 @@
       when: netq_started.changed
 
     - name: Restart NetQ Agent
-      command: netq config agent restart
+      command: netq config restart agent
       when: netq_started.changed
 
     - name: Add Docker settings to NetQ
@@ -209,7 +209,7 @@
       register: netq_docker
 
     - name: Apply NetQ Docker Settings
-      command: netq config agent restart
+      command: netq config restart agent
       when: netq_docker.changed
 
     - name: Start Docker
