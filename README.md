@@ -31,7 +31,8 @@ Prerequisites
 
 Using Virtualbox
 ------------------------
-* Add the downloaded box to vagrant via: `vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts` 
+* Add the downloaded box to vagrant via:  
+`vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts` 
 **Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1&hypervisor=Vagrant)
 
 Using Libvirt+KVM
@@ -39,9 +40,9 @@ Using Libvirt+KVM
 * Rename `Vagrantfile-kvm` to `Vagrantfile` replacing the existing Vagrantfile that is used for Virtualbox.
 * Install the Vagrant mutate plugin with 
 `vagrant plugin install vagrant-mutate`
-* Convert the existing NetQ telemetry server box image to a libvirt compatible version. 
+* Convert the existing NetQ telemetry server box image to a libvirt compatible version.   
 `vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
-* Rename the new Vagrant box image by changing the Vagrant directory name. 
+* Rename the new Vagrant box image by changing the Vagrant directory name.  
 `mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
 
 
@@ -49,12 +50,12 @@ Using Cumulus in the Cloud
 ------------------------
 Request a "Blank Workbench" on [Cumulus in the Cloud](https://cumulusnetworks.com/try-for-free/). When you receive notice that it is provisioned, connect to the *oob-mgmt-server*
 
-Once connected run 
+Once connected run  
 `git clone -b citc https://github.com/CumulusNetworks/cldemo-netq`
 
 This will set the groundwork to copy the rest of the demo to your workbench.
 
-Next 
+Next  
 `cd cldemo-netq`  
 `ansible-playbook setup.yml`
 
