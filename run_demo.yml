@@ -10,12 +10,21 @@
         msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
 
   tasks:
-    - name: Configured NTP in management VRF
+    # return code 0 means it's running
+    # return code 1 means it's not in the output of grep
+    # other return code is unknown
+    - name: Check if NTP is already in the vrf
+      shell: "vrf task list | grep ntpd"
+      register: ntp_vrf
+      failed_when: ntp_vrf.rc >= 2
+
+    - name: Configure NTP in management VRF
       command: "{{item}}"
       with_items:
         - systemctl stop ntp.service
         - systemctl disable ntp.service
         - systemctl start ntp@mgmt
+      when: ntp_vrf.rc != 0
 
     - name: Enable FRR Zebra
       lineinfile:
@@ -47,25 +56,47 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.2
         state: present
 
     - name: Install NetQ
       apt:
         name: cumulus-netq
         update_cache: yes
-      register: install-netq
+      register: netq_installed
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
+      when: netq_installed.changed
+
+    - name: Check if NetQ is running
+      command: netq config agent status
+      register: netq_running
+      failed_when: netq_running.rc > 2
+
+    - name: Check if Netqd is running in the VRF
+      shell: "vrf task list | grep netqd"
+      register: netqd_vrf
+      failed_when: netqd_vrf.rc >= 2
+
+    - name: Restart Netqd
+      command: "{{ item }}"
+      with_items:
+        - sudo systemctl stop netqd.service
+        - sudo systemctl disable netqd.service
+        - sudo systemctl enable netqd@mgmt.service
+        - sudo systemctl start netqd@mgmt.service
+      when: netqd_vrf.rc == 1
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
+      when: netq_running.rc == 1
 
     - name: Restart NetQ Agent
       command: netq config agent restart
+      when: netq_running.rc == 1
 
   handlers:
     - name: restart frr service
@@ -120,7 +151,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
         update_cache: no
         state: present
 
