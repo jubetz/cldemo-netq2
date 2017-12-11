@@ -109,7 +109,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
         state: present
 
     - name: Install cumulus-netq
@@ -157,7 +157,7 @@
       command: netq config add server 192.168.0.254
 
     - name: Start Netq Service Again
-      command: netq config agent restart
+      command: netq config restart agent
 
     - name: Check that the agent is running
       command: netq agent status
@@ -216,14 +216,3 @@
         - systemctl enable ntp@mgmt.service
       when: ntp_location.stdout != "mgmt"
 
-# - hosts: servers
-#   become: yes
-#   tasks:
-
-#     - name: Fix CITC bonds
-#       blockinfile:
-#         path: /etc/rc.local
-#         block: |
-#           /sbin/ethtool -s eth1 speed 1000 duplex full
-#           /sbin/ethtool -s eth2 speed 1000 duplex full
-#           systemctl restart networking
