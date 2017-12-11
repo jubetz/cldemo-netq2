@@ -37,9 +37,12 @@ Using Virtualbox
 Using Libvirt+KVM
 ------------------------
 * Rename `Vagrantfile-kvm` to `Vagrantfile` replacing the existing Vagrantfile that is used for Virtualbox.
-* Install the Vagrant mutate plugin with `vagrant plugin install vagrant-mutate`
-* Convert the existing NetQ telemetry server box image to a libvirt compatible version. `vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
-* Rename the new Vagrant box image by changing the Vagrant directory name. `mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
+* Install the Vagrant mutate plugin with 
+`vagrant plugin install vagrant-mutate`
+* Convert the existing NetQ telemetry server box image to a libvirt compatible version. 
+`vagrant mutate cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box libvirt`
+* Rename the new Vagrant box image by changing the Vagrant directory name. 
+`mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.1.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
 
 
 Using Cumulus in the Cloud
@@ -52,7 +55,7 @@ Once connected run
 This will set the groundwork to copy the rest of the demo to your workbench.
 
 Next 
-`cd cldemo-netq` 
+`cd cldemo-netq`  
 `ansible-playbook setup.yml`
 
 After Ansible finishes two new directories are created: 
