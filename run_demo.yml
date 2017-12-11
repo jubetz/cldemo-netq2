@@ -49,12 +49,14 @@
       apt_repository:
         repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1
         state: present
+      when: CITC != "True"
 
     - name: Install NetQ
       apt:
         name: cumulus-netq
         update_cache: yes
       register: install-netq
+      when: CITC != "True"
 
     - name: Restart Rsyslog
       service:
@@ -63,9 +65,11 @@
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
+      when: CITC != "True"
 
     - name: Restart NetQ Agent
       command: netq config agent restart
+      when: CITC != "True"
 
   handlers:
     - name: restart frr service
@@ -117,12 +121,14 @@
       apt_key:
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
+      when: CITC != "True"
 
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
         update_cache: no
         state: present
+      when: CITC != "True"
 
     - name: Install NetQ, DockerCE, ifupdown2, pip
       apt:
@@ -147,6 +153,7 @@
       service:
         name: rsyslog
         state: restarted
+      when: CITC != "True"
 
     - name: Enable NetQ Service
       service:
@@ -154,19 +161,20 @@
         enabled: yes
         state: started
       register: netq_started
+      when: CITC != "True"
 
     - name: Pause to let NetQ service to start
       pause:
         seconds: 5
-      when: netq_started.changed
+      when: netq_started.changed and CITC != "True"
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254
-      when: netq_started.changed
+      when: netq_started.changed and CITC != "True"
 
     - name: Restart NetQ Agent
       command: netq config agent restart
-      when: netq_started.changed
+      when: netq_started.changed and CITC != "True"
 
     - name: Add Docker settings to NetQ
       blockinfile:
@@ -177,9 +185,13 @@
         dest: /etc/netq/netq.yml
       register: netq_docker
 
-    - name: Apply NetQ Docker Settings
+    - name: Apply NetQ Docker Settings (NetQ 1.1)
       command: netq config agent restart
-      when: netq_docker.changed
+      when: netq_docker.changed and CITC != "True"
+
+    - name: Apply NetQ Docker Settings (NetQ 1.2)
+      command: netq config restart agent
+      when: CITC == "True"
 
     - name: Start Docker
       service:
