@@ -32,7 +32,7 @@ Prerequisites
 Using Virtualbox
 ------------------------
 * Add the downloaded box to vagrant via:  
-`vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts` 
+`vagrant box add cumulus-netq-telemetry-server-amd64-1.1.0-vagrant.box --name=cumulus/ts`  
 **Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.1&hypervisor=Vagrant)
 
 Using Libvirt+KVM
@@ -60,7 +60,7 @@ Next
 `ansible-playbook setup.yml`
 
 After Ansible finishes two new directories are created: 
-[evpn](#evpn-demo) 
+[evpn](#evpn-demo)  
 [docker](#docker-swarm--routing-on-the-host-demo)
 
 You can access either directory and follow the demo instructions below. 
@@ -84,16 +84,16 @@ Server02 and Server04 are in VLAN24, also connected via VxLAN (VNI24).
 
 All four leaf switches are configured with anycast gateways for both VLAN13 and VLAN24.
 
-Server01 has the IP `10.1.3.101` 
-Server02 has the IP `10.2.4.102` 
-Server03 has the IP `10.1.3.103` 
-Server04 has the IP `10.2.4.104` 
+Server01 has the IP `10.1.3.101`  
+Server02 has the IP `10.2.4.102`  
+Server03 has the IP `10.1.3.103`  
+Server04 has the IP `10.2.4.104`  
 
 To provision this demo, from the **oob-mgmt-server**
 * `cd evpn`
 * `ansible-playbook run_demo.yml`
 
-After the playbook finishes, you can run a number of tests to view connectivity 
+After the playbook finishes, you can run a number of tests to view connectivity   
 From **server01**:
 * `ping 10.1.3.103` (server03)
 * `ping 10.2.4.104` (server04)
@@ -157,11 +157,13 @@ Wait 5-10 seconds for NetQ to export the data.
 With NetQ, check BGP again and you should see two failed sessions. 
 `netq check bgp`
 
-Again, run the NetQ traceroute that was run earlier
-`netq trace 44:38:39:00:00:03 from leaf03` and notice that there are two paths through spine02 but only a single path through spine01 now.
+Again, run the NetQ traceroute that was run earlier  
+`netq trace 44:38:39:00:00:03 from leaf03`  
+and notice that there are two paths through spine02 but only a single path through spine01 now.
 
-View the changes to the fabric as a result of shutting down the interface 
-`netq spine01 show changes between 1s and 5m` *note* the interface state on spine01 may not change because of the virtual environment, but the BGP peer will still fail.
+View the changes to the fabric as a result of shutting down the interface  
+`netq spine01 show changes between 1s and 5m`  
+*note* the interface state on spine01 may not change because of the virtual environment, but the BGP peer will still fail.
 
 Next, from **spine02**: 
 Change the MTU on the interface
@@ -170,20 +172,24 @@ net add interface swp3 mtu 1500
 net commit
 ```
 
-If we check BGP again, we still have only two failed sessions: leaf01 and spine01. 
+If we check BGP again, we still have only two failed sessions: leaf01 and spine01.  
 `netq check bgp`
 
 If we run the traceroute again, we will see the MTU failure in the path 
-`netq trace 44:38:39:00:00:03 from leaf03` 
+`netq trace 44:38:39:00:00:03 from leaf03`  
 *If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
 
-Again, you can see the changes with `netq spine02 show changes between 1s and 5m`
+Again, you can see the changes with  
+`netq spine02 show changes between 1s and 5m`
 
 
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
 
-If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run `vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04` then recreate a fresh environment with `vagrant up`
+If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run  
+`vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04`   
+then recreate a fresh environment with  
+`vagrant up`
 
 ![Docker + Routing on the Host](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png)
 
@@ -198,7 +204,7 @@ Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server
 Swarm deploys an Apache service. The service creates three apache containers which are deployed on various nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server 
-* `cd docker` (roh for Routing On the Host)
+* `cd docker`
 * `ansible-playbook run_demo.yml`
 
 From server01: 
@@ -212,20 +218,21 @@ Log into to Quagga on **server01**:
 * `exit` to log out of quagga
 
 
-Now use NetQ to verify Docker settings. On **spine01**: 
- `netq show docker summary` to see the nodes with docker installed and brief information about them 
- `netq show docker swarm cluster` to see the members of the cluster 
- `netq show docker swarm node` to view the the members of the cluster and their roles 
- `netq show docker container network host` to view the containers with host networking, which shows the Quagga containers 
- `netq show docker service` to view the currently running services (only apache_web in this demo) 
- `netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity 
+Now use NetQ to verify Docker settings. On **spine01**:  
+ `netq show docker summary` to see the nodes with docker installed and brief information about them  
+ `netq show docker swarm cluster` to see the members of the cluster  
+ `netq show docker swarm node` to view the the members of the cluster and their roles  
+ `netq show docker container network host` to view the containers with host networking, which shows the Quagga containers  
+ `netq show docker service` to view the currently running services (only apache_web in this demo)  
+ `netq show docker service name apache_web connectivity` to view all of the containers named `apache_web` and their connectivity  
  `netq leaf02 show docker container adjacent interface swp1` to see the containers that are adjacent to the leaf02, swp1 interface (the containers deployed on server01)
 
-Now, connect to **server03** and shut down the link to leaf04 
+Now, connect to **server03** and shut down the link to leaf04  
 `sudo ifdown eth2`
 
-Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network
-`netq leaf03 show impact docker service apache_web` The red indicates that removing leaf03 from service would bring down server03 and the attached containers
+Wait 10-20 seconds for NetQ to export the data and look at the impact of removing leaf03 from the network  
+`netq leaf03 show impact docker service apache_web`  
+The red indicates that removing leaf03 from service would bring down server03 and the attached containers
 ```
 cumulus@server03:~$ netq leaf03 show impact docker service apache_web
 apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
@@ -235,15 +242,16 @@ apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
            -- apache_web.2.ao5423a8lea294mpli2qv6i0p -- server03 -- leaf03
 ```
 
-Now, still on server03, run the Docker "hello world" example to create and destroy a container. 
+Now, still on server03, run the Docker "hello world" example to create and destroy a container.  
 `sudo docker run --name test hello-world` 
 
 And view the changes to the container environment 
 `netq server03 show docker container changes`
 
-You will see `apache_web` (with trailing characters) from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
+You will see `apache_web` from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
 
-To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on. From **server01** run: 
+To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on.  
+From **server01** run:  
 `sudo docker service scale apache_web=2` 
 
 This will change the environment from 3 apache_web containers to two.
@@ -258,7 +266,7 @@ apache_web      server01   default    Replicated           2  2
 ```
 
 
-Next, scale the swarm up to 4 containers. Still on **server01** run: 
+Next, scale the swarm up to 4 containers. Still on **server01** run:  
 `sudo docker service scale apache_web=4`
 
 Wait up to 30 seconds and see the cluster change 
@@ -269,6 +277,7 @@ Service Name    Manager    Cluster    Mode          Replicas  Running
 --------------  ---------  ---------  ----------  ----------  ---------
 apache_web      server01   default    Replicated           4  4
 ```
+
 
 NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but two "Add" entries should exist) 
 ```
