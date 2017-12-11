@@ -95,7 +95,7 @@
       when: netq_running.rc == 1
 
     - name: Restart NetQ Agent
-      command: netq config agent restart
+      command: netq config restart agent
       when: netq_running.rc == 1
 
   handlers:
