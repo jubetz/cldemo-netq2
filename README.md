@@ -1,23 +1,18 @@
-This repo will set up Cumulus In the Cloud to run the cldemo-netq environment.
+Request a "Blank Workbench" on [Cumulus in the Cloud](https://cumulusnetworks.com/try-for-free/). When you receive notice that it is provisioned, connect to the *oob-mgmt-server*
 
-1.) Get a CITC workbench. Go to the [CITC page](https://cumulusnetworks.com/products/cumulus-in-the-cloud/) and click "Get Started"
+Once connected run
+`git clone -b citc https://github.com/CumulusNetworks/cldemo-netq`
 
-2.) When it's ready, login. As a pro tip, on the right side bar, under "Resources" is information about SSH access to the oob-mgmt-server.
+This will set the groundwork to copy the rest of the demo to your workbench.
 
-3.) Log into to your CITC oob-mgmt-server and run  
-`git clone -b citc https://github.com/CumulusNetworks/cldemo-netq/ citc`
+Next
+`cd cldemo-netq`
+`ansible-playbook setup.yml`
 
-4.) `cd citc`
+After Ansible finishes two new directories are created:
+[evpn](https://github.com/CumulusNetworks/cldemo-netq/blob/master/README.md#evpn-demo)
+[docker](https://github.com/CumulusNetworks/cldemo-netq/blob/master/README.md#docker-swarm--routing-on-the-host-demo)
 
-5.) `ansible-playbook setup.yml`
+You can access either directory and follow the demo instructions.
 
-6.) `git clone -b citc-dev https://github.com/CumulusNetworks/cldemo-netq/ citc-evpn`
-
-7.) `cd citc-evpn`
-
-8.) `ansible-playbook run_demo.yml`
-
-
-At this point the environment should be fully provisioned. When this unified with the generic demo the second `git clone` step will be removed and the single demo folders will apply for either CITC or local demos. 
-
-If you need to restart your workbench you can use `<citc_url>/rebuild` and the lab will be destroyed and brought back up, similar to using `vagrant destroy ; vagrant up`
+To switch between demos, please _reprovision_ your Cumulus in the Cloud instance.
