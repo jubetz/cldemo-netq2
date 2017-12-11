@@ -242,10 +242,10 @@ apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
            -- apache_web.2.ao5423a8lea294mpli2qv6i0p -- server03 -- leaf03
 ```
 
-Now, still on server03, run the Docker "hello world" example to create and destroy a container.  
+Now, still on **server03**, run the Docker "hello world" example to create and destroy a container.  
 `sudo docker run --name test hello-world` 
 
-And view the changes to the container environment 
+And view the changes to the container environment  
 `netq server03 show docker container changes`
 
 You will see `apache_web` from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
