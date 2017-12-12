@@ -162,7 +162,7 @@ Again, run the NetQ traceroute that was run earlier
 and notice that there are two paths through spine02 but only a single path through spine01 now.
 
 View the changes to the fabric as a result of shutting down the interface  
-`netq spine01 show changes between 1s and 5m`  
+`netq spine01 show bgp changes between 1s and 5m`  
 *note* the interface state on spine01 may not change because of the virtual environment, but the BGP peer will still fail.
 
 Next, from **spine02**: 
