@@ -81,6 +81,10 @@
       command: netq config agent restart
       when: citc is undefined
 
+    - name: Restart NetQ 1.2 Agent
+      command: netq config restart agent
+      when: citc is defined
+
     - name: reboot
       command: /sbin/shutdown -r +1
       async: 0
@@ -164,6 +168,10 @@
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
+      when: citc is undefined
+
+    - name: Restart NetQ Agent
+      command: netq config agent restart
       when: citc is undefined
 
     - name: Restart NetQ Agent
