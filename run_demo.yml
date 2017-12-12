@@ -39,39 +39,47 @@
       apt_key:
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
+      when: citc is undefined
 
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
         state: present
         update_cache: no
+      when: citc is undefined
 
     - name: Install NetQ
       apt:
         name: cumulus-netq
         update_cache: yes
       register: install-netq
+      when: citc is undefined
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
+      when: citc is undefined
 
     - name: Enable NetQ Service
       service:
         name: netqd
         enabled: yes
         state: started
+      when: citc is undefined
 
     - name: Pause to let NetQ service to start
       pause:
         seconds: 5
+      when: citc is undefined
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254
+      when: citc is undefined
 
     - name: Restart NetQ Agent
       command: netq config agent restart
+      when: citc is undefined
 
     - name: reboot
       command: /sbin/shutdown -r +1
@@ -105,6 +113,7 @@
         - systemctl stop ntp.service
         - systemctl disable ntp.service
         - systemctl start ntp@mgmt
+      when: citc is undefined
 
     - name: Enable FRR Zebra
       lineinfile:
@@ -139,22 +148,27 @@
         repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1  # yamllint disable-line rule:line-length
         state: present
         update_cache: no
+      when: citc is undefined
 
     - name: Install NetQ
       apt:
         name: cumulus-netq
         update_cache: yes
+      when: citc is undefined
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
+      when: citc is undefined
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
+      when: citc is undefined
 
     - name: Restart NetQ Agent
       command: netq config agent restart
+      when: citc is undefined
 
   handlers:
     - name: restart frr service
