@@ -180,7 +180,7 @@ If we run the traceroute again, we will see the MTU failure in the path
 *If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
 
 Again, you can see the changes with  
-`netq spine02 show changes between 1s and 5m`
+`netq spine02 show interface changes between 1s and 5m`
 
 
 ### Docker Swarm + Routing on the Host Demo
