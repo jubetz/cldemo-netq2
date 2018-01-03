@@ -78,12 +78,7 @@
       when: citc is undefined
 
     - name: Restart NetQ Agent
-      command: netq config agent restart
-      when: citc is undefined
-
-    - name: Restart NetQ 1.2 Agent
       command: netq config restart agent
-      when: citc is defined
 
     - name: reboot
       command: /sbin/shutdown -r +1
@@ -172,7 +167,6 @@
 
     - name: Restart NetQ Agent
       command: netq config restart agent
-      when: citc is undefined
 
   handlers:
     - name: restart frr service
