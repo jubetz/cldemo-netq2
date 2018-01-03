@@ -207,7 +207,7 @@ Swarm deploys an Apache service. The service creates three apache containers whi
 * `cd docker`
 * `ansible-playbook run_demo.yml`
 
-From server01: 
+From **server01**: 
 * `sudo docker node ls` to verify that all four servers are in the swarm
 * `sudo docker service ps apache_web` to see the three apache containers deployed
 
