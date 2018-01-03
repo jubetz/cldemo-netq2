@@ -6,8 +6,8 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
-        msg: "Cumulus Linux version must be 3.4 or later. Version {{ansible_lsb.release}} detected"
+        that: "{{ansible_lsb.release | version_compare('3.5', '>=') }}"
+        msg: "Cumulus Linux version must be 3.5 or later. Version {{ansible_lsb.release}} detected"
 
   tasks:
     # return code 0 means it's running
@@ -54,25 +54,25 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.2
-        state: present
+    # - name: Add Cumulus Repo
+    #   apt_repository:
+    #     repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.2
+    #     state: present
 
-    - name: Install NetQ
-      apt:
-        name: cumulus-netq
-        update_cache: yes
-      register: netq_installed
+    # - name: Install NetQ
+    #   apt:
+    #     name: cumulus-netq
+    #     update_cache: yes
+    #   register: netq_installed
 
-    - name: Restart Rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-      when: netq_installed.changed
+    # - name: Restart Rsyslog
+    #   service:
+    #     name: rsyslog
+    #     state: restarted
+    #   when: netq_installed.changed
 
     - name: Check if NetQ is running
-      command: netq config agent status
+      command: netq config status agent
       register: netq_running
       failed_when: netq_running.rc > 2
 
