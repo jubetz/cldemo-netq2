@@ -54,35 +54,6 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
-    # - name: Add Cumulus Repo
-    #   apt_repository:
-    #     repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.2
-    #     state: present
-
-    # - name: Install NetQ
-    #   apt:
-    #     name: cumulus-netq
-    #     update_cache: yes
-    #   register: netq_installed
-
-    # - name: Restart Rsyslog
-    #   service:
-    #     name: rsyslog
-    #     state: restarted
-    #   when: netq_installed.changed
-
-    # - name: Check if NetQ is installed and running
-    #   command: netq config status agent
-    #   register: netq_running
-    #   failed_when: netq_running.rc > 2
-
-    # # Vx ships with NetQ running but not configured by default.
-    # - name: Check if NetQ is installed but not running. 
-    #   command: netq check agents
-    #   register: netq_installed_not_running
-    #   failed_when: netq_installed_not_running.rc > 2
-      # when: netq_running.rc == 0 
-
     - name: Check if Netqd is running in the VRF
       shell: "vrf task list | grep netqd"
       register: netqd_vrf
