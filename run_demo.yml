@@ -193,18 +193,11 @@
         state: started
       register: netq_started
 
-    - name: Pause to let NetQ service to start
-      pause:
-        seconds: 5
-      when: netq_started.changed
-
     - name: Add netq server IP
       command: netq config add server 192.168.0.254
-      when: netq_started.changed
 
     - name: Restart NetQ Agent
       command: netq config restart agent
-      when: netq_started.changed
 
     - name: Add Docker settings to NetQ
       blockinfile:
