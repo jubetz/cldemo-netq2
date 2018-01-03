@@ -78,7 +78,7 @@
       when: citc is undefined
 
     - name: Restart NetQ Agent
-      command: netq config restart agent
+      command: netq config agent restart
 
     - name: reboot
       command: /sbin/shutdown -r +1
