@@ -43,7 +43,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.1
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
         state: present
         update_cache: no
       when: citc is undefined
@@ -78,12 +78,7 @@
       when: citc is undefined
 
     - name: Restart NetQ Agent
-      command: netq config agent restart
-      when: citc is undefined
-
-    - name: Restart NetQ 1.2 Agent
       command: netq config restart agent
-      when: citc is defined
 
     - name: reboot
       command: /sbin/shutdown -r +1
@@ -105,9 +100,9 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ansible_lsb.release | version_compare('3.4', '>=') }}"
+        that: "{{ansible_lsb.release | version_compare('3.5', '>=') }}"
         msg: >
-          "Cumulus Linux version must be 3.4 or later.
+          "Cumulus Linux version must be 3.5 or later.
           Version {{ansible_lsb.release}} detected"
 
   tasks:
@@ -147,36 +142,12 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.1  # yamllint disable-line rule:line-length
-        state: present
-        update_cache: no
-      when: citc is undefined
-
-    - name: Install NetQ
-      apt:
-        name: cumulus-netq
-        update_cache: yes
-      when: citc is undefined
-
-    - name: Restart Rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-      when: citc is undefined
-
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
       when: citc is undefined
 
     - name: Restart NetQ Agent
-      command: netq config agent restart
-      when: citc is undefined
-
-    - name: Restart NetQ Agent
-      command: netq config agent restart
-      when: citc is undefined
+      command: netq config restart agent
 
   handlers:
     - name: restart frr service
