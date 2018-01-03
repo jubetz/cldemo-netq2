@@ -71,10 +71,17 @@
     #     state: restarted
     #   when: netq_installed.changed
 
-    - name: Check if NetQ is running
-      command: netq config status agent
-      register: netq_running
-      failed_when: netq_running.rc > 2
+    # - name: Check if NetQ is installed and running
+    #   command: netq config status agent
+    #   register: netq_running
+    #   failed_when: netq_running.rc > 2
+
+    # # Vx ships with NetQ running but not configured by default.
+    # - name: Check if NetQ is installed but not running. 
+    #   command: netq check agents
+    #   register: netq_installed_not_running
+    #   failed_when: netq_installed_not_running.rc > 2
+      # when: netq_running.rc == 0 
 
     - name: Check if Netqd is running in the VRF
       shell: "vrf task list | grep netqd"
@@ -92,11 +99,11 @@
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
-      when: netq_running.rc == 1
+      # when: netq_running.rc == 1 or netq_running.rc
 
     - name: Restart NetQ Agent
       command: netq config restart agent
-      when: netq_running.rc == 1
+      # when: netq_running.rc == 1
 
   handlers:
     - name: restart frr service
