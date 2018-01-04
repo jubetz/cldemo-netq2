@@ -70,11 +70,9 @@
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
-      # when: netq_running.rc == 1 or netq_running.rc
 
     - name: Restart NetQ Agent
       command: netq config restart agent
-      # when: netq_running.rc == 1
 
   handlers:
     - name: restart frr service
@@ -126,12 +124,14 @@
       apt_key:
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
+      when: citc is undefined
 
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
         update_cache: no
         state: present
+      when: citc is undefined
 
     - name: Install NetQ, DockerCE, ifupdown2, pip
       apt:
@@ -156,6 +156,7 @@
       service:
         name: rsyslog
         state: restarted
+      when: citc is undefined
 
     - name: Enable NetQ Service
       service:
@@ -163,6 +164,7 @@
         enabled: yes
         state: started
       register: netq_started
+      when: citc is undefined
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254
