@@ -235,11 +235,12 @@ Wait 10-20 seconds for NetQ to export the data and look at the impact of removin
 The red indicates that removing leaf03 from service would bring down server03 and the attached containers
 ```
 cumulus@server03:~$ netq leaf03 show impact docker service apache_web
-apache_web -- apache_web.1.l8xmatcfr6pupt3ebz3ffwalt -- server01 -- leaf01
-                                                                 -- leaf02
-           -- apache_web.3.mv1dtjeiveo6b9rjk83r1j0qe -- server02 -- leaf01
-                                                                 -- leaf02
-           -- apache_web.2.ao5423a8lea294mpli2qv6i0p -- server03 -- leaf03
+apache_web -- apache_web.3.8wc5zlr5f07qk7yfbb9ggoq63 -- server02:eth1:eth1 -- swp2:swp2:leaf01
+                                                     -- server02:eth2:eth2 -- swp2:swp2:leaf02
+           -- apache_web.2.y5f8qtv0ev3pw8kglqtbj7zof -- server01:eth1:eth1 -- swp1:swp1:leaf01
+                                                     -- server01:eth2:eth2 -- swp1:swp1:leaf02
+           -- apache_web.1.0hzzlrw7u0alwrcaccxcs5g0n -- server03:eth1:eth1 -- swp1:swp1:leaf03
+                                                     -- server03:eth2:eth2 -- swp1:swp1:leaf04
 ```
 
 Now, still on **server03**, run the Docker "hello world" example to create and destroy a container.  
