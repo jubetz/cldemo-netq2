@@ -7,6 +7,7 @@ sudo apt-get update
 sudo apt-get install -yq git python-netaddr sshpass
 sudo apt-get install -yq -t jessie-backports ansible
 git clone https://github.com/cumulusnetworks/cldemo-provision-ts.git
+sudo systemctl enable dhcpd.service
 
 echo " ### Pushing Ansible Hosts File ###"
 mkdir -p /etc/ansible
