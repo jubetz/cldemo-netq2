@@ -206,21 +206,21 @@
         - eth2
         - lo
 
-    - name: Create Quagga configuration directory
+    - name: Create FRR configuration directory
       file:
-        path: /etc/quagga
+        path: /etc/frr
         state: directory
         mode: 0775
 
-    - name: Copy Quagga daemons File
+    - name: Copy FRR daemons File
       copy:
         src: configurations/{{ansible_hostname}}/daemons
-        dest: /etc/quagga/daemons
+        dest: /etc/frr/daemons
 
-    - name: Copy Quagga configuration File
+    - name: Copy FRR configuration File
       copy:
-        src: configurations/{{ansible_hostname}}/quagga.conf
-        dest: /etc/quagga/Quagga.conf
+        src: configurations/{{ansible_hostname}}/frr.conf
+        dest: /etc/frr/frr.conf
 
     - name: Deploy ROH Container
       docker_container:
@@ -231,10 +231,10 @@
         restart_policy: unless-stopped
         tty: true
         recreate: yes
-        image: cumulusnetworks/quagga:latest
+        image: hub.cumulusnetworks.com/chp-roh:latest
         volumes:
-          - "/etc/quagga/daemons:/etc/quagga/daemons"
-          - "/etc/quagga/Quagga.conf:/etc/quagga/Quagga.conf"
+          - "/etc/frr/daemons:/etc/frr/daemons"
+          - "/etc/frr/frr.conf:/etc/frr/frr.conf"
 
   handlers:
       - name: restart LLDP
