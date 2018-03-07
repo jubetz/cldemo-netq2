@@ -184,7 +184,7 @@ Again, you can see the changes with
 
 
 ### Docker Swarm + Routing on the Host Demo
-The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install Quagga and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
+The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install FRR and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
 
 If any existing demos have already been provisioned, the lab must be rebuilt. On your VM host run  
 `vagrant destroy -f leaf01 leaf02 leaf03 leaf04 spine01 spine02 server01 server02 server03 server04`   
@@ -211,11 +211,11 @@ From **server01**:
 * `sudo docker node ls` to verify that all four servers are in the swarm
 * `sudo docker service ps apache_web` to see the three apache containers deployed
 
-Log into to Quagga on **server01**: 
-* `sudo docker exec -it cumulus-roh /usr/bin/vtysh` to attach to the Quagga process
+Log into to FRR on **server01**: 
+* `sudo docker exec -it cumulus-roh /usr/bin/vtysh` to attach to the FRR process
 * `show ip bgp summary` to view the BGP peers
 * `show ip bgp` to view the BGP routes
-* `exit` to log out of quagga
+* `CTL P CLT Q` to log out of FRR container and keep it running 
 
 
 Now use NetQ to verify Docker settings. On **spine01**:  
