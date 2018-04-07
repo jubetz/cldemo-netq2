@@ -43,7 +43,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
         state: present
         update_cache: no
       when: citc is undefined
@@ -141,6 +141,32 @@
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
       notify: apply frr config
+
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.3
+        state: present
+        update_cache: no
+      when: citc is undefined
+
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq
+        update_cache: yes
+      register: install-netq
+      when: citc is undefined
+
+   - name: Enable NetQ Service
+      service:
+        name: netqd
+        enabled: yes
+        state: started
+      when: citc is undefined
+
+    - name: Pause to let NetQ service to start
+      pause:
+        seconds: 5
+      when: citc is undefined
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
