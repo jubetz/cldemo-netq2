@@ -54,19 +54,48 @@
         validate: vtysh -C -f %s
       notify: apply frr config
 
-    - name: Check if Netqd is running in the VRF
-      shell: "vrf task list | grep netqd"
-      register: netqd_vrf
-      failed_when: netqd_vrf.rc >= 2
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.3
+        update_cache: no
+        state: present
+      when: citc is undefined
 
-    - name: Restart Netqd
-      command: "{{ item }}"
-      with_items:
-        - sudo systemctl stop netqd.service
-        - sudo systemctl disable netqd.service
-        - sudo systemctl enable netqd@mgmt.service
-        - sudo systemctl start netqd@mgmt.service
-      when: netqd_vrf.rc == 1
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq 
+        update_cache: yes
+      register: install_netq
+      when: citc is undefined
+
+    - name: Enable NetQ Service
+      service:
+        name: netqd
+        enabled: yes
+        state: started
+      when: citc is undefined
+
+    - name: Restart Rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+      when: citc is undefined
+
+
+
+#    - name: Check if Netqd is running in the VRF
+#      shell: "vrf task list | grep netqd"
+#      register: netqd_vrf
+#      failed_when: netqd_vrf.rc >= 2
+
+#    - name: Restart Netqd
+#      command: "{{ item }}"
+#      with_items:
+#        - sudo systemctl stop netqd.service
+#        - sudo systemctl disable netqd.service
+#        - sudo systemctl enable netqd@mgmt.service
+#        - sudo systemctl start netqd@mgmt.service
+#      when: netqd_vrf.rc == 1
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
@@ -128,7 +157,7 @@
 
     - name: Add Cumulus Repo
       apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.2
+        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
         update_cache: no
         state: present
       when: citc is undefined
