@@ -156,7 +156,7 @@
       register: install-netq
       when: citc is undefined
 
-   - name: Enable NetQ Service
+    - name: Enable NetQ Service
       service:
         name: netqd
         enabled: yes
