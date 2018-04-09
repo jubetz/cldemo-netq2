@@ -25,14 +25,14 @@ Prerequisites
 * Running this simulation roughly 10G of RAM.
 * Internet connectivity is required from the hypervisor. Multiple packages are installed on both the switches and servers when the lab is created.
 * Download this repository locally with `git clone https://github.com/CumulusNetworks/cldemo-netq.git` or if you do not have Git installed, [Download the zip file](https://github.com/CumulusNetworks/cldemo-netq/archive/master.zip)
-* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant. You need to be logged into the site to access this.
+* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant. You need to be logged into the site to access this.  Choose NetQ 1.3.
 * Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release [1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/).
 * Install [Virtualbox](https://www.virtualbox.org/wiki/VirtualBox) or [Libvirt+KVM](https://libvirt.org/drvqemu.html) hypervisors.
 
 Using Virtualbox
 ------------------------
 * Add the downloaded box to vagrant via:  
-`vagrant box add cumulus-netq-telemetry-server-amd64-1.2.1-vagrant.box --name=cumulus/ts`  
+`vagrant box add cumulus-netq-telemetry-server-amd64-1.3.0-vagrant.box --name=cumulus/ts`  
 **Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant)
 
 Using Libvirt+KVM
@@ -41,9 +41,9 @@ Using Libvirt+KVM
 * Install the Vagrant mutate plugin with 
 `vagrant plugin install vagrant-mutate`
 * Convert the existing NetQ telemetry server box image to a libvirt compatible version.   
-`vagrant mutate cumulus-netq-telemetry-server-amd64-1.2.1-vagrant.box libvirt`
+`vagrant mutate cumulus-netq-telemetry-server-amd64-1.3.0-vagrant.box libvirt`
 * Rename the new Vagrant box image by changing the Vagrant directory name.  
-`mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.2.1-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
+`mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.3.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
 
 
 Using Cumulus in the Cloud
