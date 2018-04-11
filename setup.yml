@@ -55,18 +55,6 @@
         dest: /etc/ansible/hosts
       become: yes
 
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.3
-        update_cache: yes 
-        state: present
-      become: yes
-#      when: citc is undefined
-
-    - name: Install NetQ 1.3
-      command: apt-get -y --allow-unauthenticated install cumulus-netq 
-#      when: citc is undefined
-      become: yes
 
 #    - name: Install NetQ
 #      apt:
@@ -75,24 +63,20 @@
 #      register: install_netq
 #      when: citc is undefined
 
-    - name: Enable NetQ Service
-      service:
-        name: netqd
-        enabled: yes
-        state: started
+#    - name: Enable NetQ Service
+#      service:
+#        name: netqd
+#        enabled: yes
+#        state: started
 #      when: citc is undefined
-      become: yes
+#      become: yes
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
-#      when: citc is undefined
+      when: citc is undefined
       become: yes
-
-
-
-
 
     - name: Change NetQ IP
       lineinfile:
@@ -146,17 +130,17 @@
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
 
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
-        state: present
-        update_cache: yes
+#    - name: Add Cumulus Repo
+#      apt_repository:
+#        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
+#        state: present
+#        update_cache: yes
 
-    - name: Install cumulus-netq
-      apt:
-        name: cumulus-netq
-        update_cache: yes
-      register: installNetQ
+#    - name: Install cumulus-netq
+#      apt:
+#        name: cumulus-netq
+#        update_cache: yes
+#      register: installNetQ
 
     - name: Install LLDP, traceroute
       apt:
