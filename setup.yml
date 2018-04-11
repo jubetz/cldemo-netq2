@@ -169,7 +169,7 @@
       service:
         name: rsyslog
         state: restarted
-      when: installNetQ.changed
+#      when: installNetQ.changed
 
     - name: Start NetQ Service on Servers
       service:
