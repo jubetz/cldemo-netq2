@@ -31,6 +31,9 @@ ifup swp1
 sed "s/PasswordAuthentication no/PasswordAuthentication yes/" -i /etc/ssh/sshd_config
 service ssh restart
 
+# Update GPG keys to solve KB issue https://support.cumulusnetworks.com/hc/en-us/articles/360002663013-Updating-Expired-GPG-Keys
+wget https://repo3.cumulusnetworks.com/repo/pool/cumulus/c/cumulus-archive-keyring/cumulus-archive-keyring_3-cl3u4_all.deb
+sudo dpkg -i cumulus-archive-keyring_3-cl3u4_all.deb
 
 echo "#################################"
 echo "   Finished"
