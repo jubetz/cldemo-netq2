@@ -426,6 +426,24 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc14', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc15', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc16', 'allow-all']
+	 
+	 # workaround for 3.7.0 / CM-22592
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype13", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype14", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype15", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype16", "virtio"] 
 
 end
 
