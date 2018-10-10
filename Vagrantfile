@@ -428,6 +428,10 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc16', 'allow-all']
 	 
 	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
 	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
     	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
 	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
