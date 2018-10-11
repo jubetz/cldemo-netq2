@@ -119,7 +119,7 @@ IP Address       Hostname         Interface            Mac Address              
 ```
 * `netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty` (this should be the MAC address of server01's `uplink` bond interface)
 ```
-cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:17 vlan 13 from leaf03 pretty
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
 Number of Paths: 4
 Number of Paths with Errors: 0
 Number of Paths with Warnings: 0
@@ -163,7 +163,7 @@ With NetQ, check BGP again and you should see two failed sessions.
 `netq check bgp`
 
 Again, run the NetQ traceroute that was run earlier  
-`netq trace 44:38:39:00:00:03 from leaf03`  
+`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`  
 and notice that there are two paths through spine02 but only a single path through spine01 now.
 
 View the changes to the fabric as a result of shutting down the interface  
@@ -181,7 +181,7 @@ If we check BGP again, we still have only two failed sessions: leaf01 and spine0
 `netq check bgp`
 
 If we run the traceroute again, we will see the MTU failure in the path 
-`netq trace 44:38:39:00:00:03 from leaf03`  
+`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`  
 *If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
 
 Again, you can see the changes with  
