@@ -3,6 +3,8 @@ sudo sh -c 'echo "deb http://httpredir.debian.org/debian jessie main" > /etc/apt
 sudo sh -c 'echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://security.debian.org/ jessie/updates main" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://repo3.cumulusnetworks.com/repo Jessie-supplemental upstream" > /etc/apt/sources.list.d/jessie_cl.list'
+# remove list file that points to build servers so that we don't throw errors in the apt-get update
+[ -e /etc/apt/sources.list.d/cumulus-apps.list ] && sudo rm /etc/apt/sources.list.d/cumulus-apps.list
 sudo apt-get update
 sudo apt-get install -yq git python-netaddr sshpass
 sudo apt-get install -yq -t jessie-backports ansible
