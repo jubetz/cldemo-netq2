@@ -119,12 +119,17 @@ IP Address       Hostname         Interface            Mac Address              
 ```
 * `netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty` (this should be the MAC address of server01's `uplink` bond interface)
 ```
-cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
-leaf03 -- leaf03:vni13 -- leaf03:swp51 -- spine01:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
-                                       -- spine01:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
-                       -- leaf03:swp52 -- spine02:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
-                                       -- spine02:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
-Path MTU is 9000
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:17 vlan 13 from leaf03 pretty
+Number of Paths: 4
+Number of Paths with Errors: 0
+Number of Paths with Warnings: 0
+Path MTU: 9000
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp51 -- swp3 spine01 swp1 -- swp51 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+
 ```
 
 On leaf01 misconfigure EVPN 
