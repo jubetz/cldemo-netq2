@@ -117,9 +117,9 @@ IP Address       Hostname         Interface            Mac Address              
 10.1.3.14        server03         uplink               32:3e:76:e2:7b:ae        default          no     6m:58.210s
 192.168.0.254    server03         eth0                 44:38:39:00:00:5f        default          no     9m:57.746s
 ```
-* `netq trace 44:38:39:00:00:03 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
+* `netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty` (this should be the MAC address of server01's `uplink` bond interface)
 ```
-cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 from leaf03
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
 leaf03 -- leaf03:vni13 -- leaf03:swp51 -- spine01:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
                                        -- spine01:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
                        -- leaf03:swp52 -- spine02:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
