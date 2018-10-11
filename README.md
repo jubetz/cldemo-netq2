@@ -144,6 +144,11 @@ And check that BGP is still working as expected
 And that EVPN is misconfigured 
 `netq check evpn`
 
+```
+cumulus@server01:~$ netq check evpn
+Total Nodes: 10, Failed Nodes: 0, Total Sessions: 6, Failed Sessions: 0, Total VNIs: 2
+```
+(notice Total Sessions: is now 6 from the expected 8)
 
 Correct the EVPN misconfiguration
 ```
