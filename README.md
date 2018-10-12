@@ -211,7 +211,7 @@ After BGP is configured on the hosts, [Docker CE](https://www.docker.com/communi
 
 Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server03 and server04 act as _Swarm Workers_.
 
-Swarm deploys an Apache service. The service creates three apache containers which are deployed on various nodes in the swarm.
+Swarm deploys an Apache service. The service creates four apache containers which are deployed on various nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server 
 * `cd docker`
@@ -219,7 +219,7 @@ Swarm deploys an Apache service. The service creates three apache containers whi
 
 From **server01**: 
 * `sudo docker node ls` to verify that all four servers are in the swarm
-* `sudo docker service ps apache_web` to see the three apache containers deployed
+* `sudo docker service ps apache_web` to see the four apache containers deployed
 
 Log into to FRR on **server01**: 
 * `sudo docker exec -it cumulus-roh /usr/bin/vtysh` to attach to the FRR process
