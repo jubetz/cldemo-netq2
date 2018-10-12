@@ -1465,8 +1465,6 @@ end
       # Run Any Extra Config
       device.vm.provision :shell , path: "./helper_scripts/config_server.sh"
 
-
-
       # Apply the interface re-map
       device.vm.provision "file", source: "./helper_scripts/apply_udev.py", destination: "/home/vagrant/apply_udev.py"
       device.vm.provision :shell , inline: "chmod 755 /home/vagrant/apply_udev.py"
@@ -1478,7 +1476,6 @@ end
       device.vm.provision :shell , inline: "/home/vagrant/apply_udev.py -vm "
       device.vm.provision :shell , inline: "/home/vagrant/apply_udev.py -s"
       device.vm.provision :shell , :inline => $script
-
 
 
   end
@@ -1511,9 +1508,6 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
-	    	#make sure this Mac addr is random for the NAT interface in virtual box
-	#else we end up having same chassisid in lldpd 
-        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 
@@ -1525,7 +1519,6 @@ end
 
       # Run Any Extra Config
       device.vm.provision :shell , path: "./helper_scripts/config_server.sh"
-
 
 
       # Apply the interface re-map
@@ -1572,9 +1565,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
-	    	#make sure this Mac addr is random for the NAT interface in virtual box
-	#else we end up having same chassisid in lldpd 
-        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -1633,9 +1624,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
-	    	#make sure this Mac addr is random for the NAT interface in virtual box
-	#else we end up having same chassisid in lldpd 
-        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -1694,9 +1683,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
-	    	#make sure this Mac addr is random for the NAT interface in virtual box
-	#else we end up having same chassisid in lldpd 
-        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
