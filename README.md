@@ -304,14 +304,13 @@ Wait 10-20 seconds for NetQ to export the data and look at the impact of removin
 The red indicates that removing leaf03 from service would bring down server03 and the attached containers
 ```
 cumulus@server03:~$ netq leaf03 show impact docker service apache_web
-apache_web -- apache_web.2.p2a9dt6ge990i6fq3lr4t5fyc -- server02:eth2:eth2 -- swp2:swp2:leaf02
-                                                     -- server02:eth1:eth1 -- swp2:swp2:leaf01
-           -- apache_web.1.y6k13s1dz9bup0e9af7ehrbx1 -- server04:eth1:eth1 -- swp2:swp2:leaf03
+apache_web -- apache_web.2.i46cc2s6249020xw4z8ct0id3 -- server02:eth1:eth1 -- swp2:swp2:leaf01
+                                                     -- server02:eth2:eth2 -- swp2:swp2:leaf02
+           -- apache_web.3.qwgwu4a5isy9cj1z5snx9ui8n -- server03:eth1:eth1 -- swp1:swp1:leaf03
+           -- apache_web.4.ifxyjh86gbz2ycjk6k2qkbsh3 -- server04:eth1:eth1 -- swp2:swp2:leaf03
                                                      -- server04:eth2:eth2 -- swp2:swp2:leaf04
-           -- apache_web.3.tsaywg07izdb0lpfdz9tne2kb -- server01:eth1:eth1 -- swp1:swp1:leaf01
+           -- apache_web.1.vxwdzbrrhynol1qdx9lpiiroz -- server01:eth1:eth1 -- swp1:swp1:leaf01
                                                      -- server01:eth2:eth2 -- swp1:swp1:leaf02
-           -- apache_web.4.yi8kyxh928aa6rypy5kc3dlp9 -- server03:eth1:eth1 -- swp1:swp1:leaf03
-
 ```
 
 Now, still on **server03**, run the Docker "hello world" example to create and destroy a container.  
@@ -321,6 +320,16 @@ And view the changes to the container environment
 `netq server03 show docker container changes`
 
 You will see `apache_web` from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
+```
+cumulus@server03:~$ netq server03 show docker container changes 
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
+test                 server03          172.17.0.2           True     bridge                     Del        26.601836s
+test                 server03          172.17.0.2           True     bridge                     Add        33.287585s
+```
 
 To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on.  
 From **server01** run:  
@@ -353,7 +362,6 @@ apache_web      server01   default    Replicated 5                              
 cumulus@server01:~$ 
 ```
 
-
 NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but three "Add" entries should exist) 
 ```
 cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
@@ -362,15 +370,15 @@ Matching container records:
 Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
                                                                      me
 -------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
-apache_web.5.r8uhbzr server01          10.255.0.13          False    ingress    apache_web      Add        1m:0.873s
-k1k99tk0qn79gi5i19
-apache_web.4.58pmjyq server01          10.255.0.12          False    ingress    apache_web      Add        1m:33.333s
-w70wf4b57rrxfl5ls3
-apache_web.3.fljy5yk server03          10.255.0.11          False    ingress    apache_web      Add        1m:33.530s
-pfxxt1mfh91yc46a7h
+apache_web.4.nw4lp75 server03          10.255.0.12          False    ingress    apache_web      Add        21.959066s
+xi9n541vsxcnxm8co2
+apache_web.5.cr5pvdi server03          10.255.0.13          False    ingress    apache_web      Add        22.957091s
+qh4cyw492fmu73kg54
+apache_web.3.ixklc4c server04          10.255.0.11          False    ingress    apache_web      Add        23.538899s
+9wlcvuhiqlphhskao4
 ```
 
-Going further back in time we can also see the cluster being scaled down from four to two
+Going further back in time we can also see when the cluster was scaled down from four to two:
 ```
 cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
 
@@ -379,20 +387,26 @@ Container Name       Hostname          Container IP         IP Masq  Network Na 
                                                                      me
 -------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
 <snip>
-apache_web.3.tsaywg0 server01          10.255.0.9           False    ingress    apache_web      Del        2m:23.275s
-7izdb0lpfdz9tne2kb
-apache_web.4.yi8kyxh server03          10.255.0.10          False    ingress    apache_web      Del        2m:24.664s
+apache_web.4.ifxyjh8 server04          10.255.0.7           False    ingress    apache_web      Del        1m:58.385s
+6gbz2ycjk6k2qkbsh3
+apache_web.3.qwgwu4a server03          10.255.0.10          False    ingress    apache_web      Del        1m:58.920s
+5isy9cj1z5snx9ui8n
+
 ```
 
-Finally, you can view the service in the past when only two instances were running
+Finally, you can view the service in the past when only two instances were running.  You will likely need a different value than the example below using 3m ago.  How many minutes ago was it when you scaled back to two apache_web services?
 ```
-cumulus@server01:~$ netq show docker container service apache_web around 15m
-Matching container records are:
-Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name    UpTime
--------------------- ---------- ----------------- -------- -------------- --------------- ---------------
-apache_web.1.hbqiy94 server02   10.255.0.7        False    ingress        apache_web      0:27:26
-7e2h5dpnpybgqbqncw
-apache_web.2.vkiiim6 server04   10.255.0.8        False    ingress        apache_web      0:27:25
+cumulus@server01:~$ netq show docker container service apache_web around 3m
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    Up Time
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- -------------------------
+apache_web.1.w3ipcm5 server02          10.255.0.7           False    ingress    apache_web      0:06:10
+gl2k8adb3elid34hm0
+apache_web.2.mlh6as1 server01          10.255.0.8           False    ingress    apache_web      0:06:09
+jpradrkccldqqwem99
+cumulus@server01:~$ 
 ```
 
 
