@@ -151,7 +151,6 @@ And check that BGP is still working as expected
 
 And that EVPN is misconfigured 
 `netq check evpn`
-
 ```
 cumulus@server01:~$ netq check evpn
 Total Nodes: 10, Failed Nodes: 0, Total Sessions: 6, Failed Sessions: 0, Total VNIs: 2
@@ -164,7 +163,7 @@ net add bgp evpn advertise-all-vni
 net commit
 ```
 
-Verify that EVPN is functional (this may take up to 30 seconds)
+Verify that EVPN is functional and shows "Total Sessions: 8" (this may take up to 30 seconds)
 `netq check evpn`
 
 Now, on leaf01 shut down the link to spine01 
@@ -174,9 +173,30 @@ Wait 5-10 seconds for NetQ to export the data.
 
 With NetQ, check BGP again and you should see two failed sessions. 
 `netq check bgp`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 2, Total Sessions: 16 , Failed Sessions: 2, 
+Hostname          VRF             Peer Name         Peer Hostname     Reason                                        Last Changed
+----------------- --------------- ----------------- ----------------- --------------------------------------------- -------------------------
+leaf01            default         swp51             spine01           Link Admin Down                               0.990985s
+spine01           default         swp1              leaf01            Hold Timer Expired                            9.489406s
+```
 
-Again, run the NetQ traceroute that was run earlier  
-`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`  
+Again, run the NetQ traceroute that was run earlier:  
+`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
+Number of Paths: 4
+Number of Paths with Errors: 1
+  Path: 4 Path Incomplete
+Number of Paths with Warnings: 0
+Path MTU: 9000
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+ vni: 13 leaf03 bond01 -- uplink server01 uplink 
+```
 and notice that there are two paths through spine02 but only a single path through spine01 now.
 
 View the changes to the fabric as a result of shutting down the interface  
@@ -192,14 +212,45 @@ net commit
 
 If we check BGP again, we still have only two failed sessions: leaf01 and spine01.  
 `netq check bgp`
+```
+cumulus@spine02:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 2, Total Sessions: 16 , Failed Sessions: 2, 
+Hostname          VRF             Peer Name         Peer Hostname     Reason                                        Last Changed
+----------------- --------------- ----------------- ----------------- --------------------------------------------- -------------------------
+leaf01            default         swp51             spine01           Link Admin Down                               0.65267s
+spine01           default         swp1              leaf01            RA not configured(?)                          0.65404s
+```
 
 If we run the traceroute again, we will see the MTU failure in the path 
 `netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`  
 *If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
+```
+cumulus@spine02:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
+Number of Paths: 4
+  Inconsistent path mtu among paths
+Number of Paths with Errors: 1
+  Path: 4 Path Incomplete
+Number of Paths with Warnings: 2
+  Path: 1 MTU mismatch between leaf03:swp52 (9216) and spine02:swp3 (1500)
+  Path: 2 MTU mismatch between leaf03:swp52 (9216) and spine02:swp3 (1500)
+Path MTU: 1500
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+ vni: 13 leaf03 bond01 -- uplink server01 uplink 
+```
 
 Again, you can see the changes with  
 `netq spine02 show interface changes between 1s and 5m`
+```
+cumulus@spine02:mgmt-vrf:~$ netq spine02 show interface changes between 1s and 5m
 
+Matching link records:
+Hostname          Interface                 Type             State      VRF             Details                             DB State   Last Changed
+----------------- ------------------------- ---------------- ---------- --------------- ----------------------------------- ---------- -------------------------
+spine02           swp3                      swp              up         default         MTU:1500                            Add        1m:21.883s
+```
 
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install FRR and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
