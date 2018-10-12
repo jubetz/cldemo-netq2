@@ -323,4 +323,4 @@
   become: yes
   tasks:
     - name: Deploy Apache Containers
-      command: docker service create --name apache_web --replicas 3 --publish 8080:80 php:5.6-apache
+      command: docker service create --name apache_web --replicas 4 --publish 8080:80 php:5.6-apache
