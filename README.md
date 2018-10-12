@@ -104,7 +104,15 @@ Notice the path from server01 to server03 is direct, while server01 to server04 
 
 From **leaf01**:
 * `netq check bgp`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 0, Total Sessions: 16, Failed Sessions: 0
+```
 * `netq check evpn`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check evpn
+Total Nodes: 10, Failed Nodes: 0, Total Sessions: 8, Failed Sessions: 0, Total VNIs: 2
+```
 * `ip route show | netq resolve` to view the routing table with NetQ hostname resolution
 * `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101` (*note:* the MAC address you see may be different from these examples)
 ```
