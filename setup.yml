@@ -54,23 +54,7 @@
         src: hosts
         dest: /etc/ansible/hosts
       become: yes
-
-
-#    - name: Install NetQ
-#     apt:
-#        name: cumulus-netq 
-#        update_cache: yes
-#      register: install_netq
-#      when: citc is undefined
-
-#    - name: Enable NetQ Service
-#      service:
-#        name: netqd
-#        enabled: yes
-#        state: started
-#      when: citc is undefined
-#      become: yes
-
+      
     - name: Restart Rsyslog
       service:
         name: rsyslog
