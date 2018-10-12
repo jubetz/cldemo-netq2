@@ -363,6 +363,7 @@ cumulus@server01:~$
 ```
 
 NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but three "Add" entries should exist) 
+`netq show docker container service apache_web changes between 1s and 5m`
 ```
 cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
 
@@ -395,6 +396,7 @@ apache_web.3.qwgwu4a server03          10.255.0.10          False    ingress    
 ```
 
 Finally, you can view the service in the past when only two instances were running.  You will likely need a different value than the example below using 3m ago.  How many minutes ago was it when you scaled back to two apache_web services?
+`netq show docker container service apache_web around <time>`
 ```
 cumulus@server01:~$ netq show docker container service apache_web around 3m
 
