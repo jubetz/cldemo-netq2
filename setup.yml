@@ -152,7 +152,7 @@
       register: installLLDP
         
     - name: Install traceroute
-       apt:
+      apt:
         name: traceroute
         state: installed
         update_cache: no
