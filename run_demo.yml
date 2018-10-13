@@ -44,7 +44,6 @@
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
-        state: present
         update_cache: no
       when: citc is undefined
 
