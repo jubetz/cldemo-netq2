@@ -61,16 +61,17 @@
         state: present
       when: citc is undefined
 
-    - name: Install NetQ 1.4
-      command: apt-get -y --allow-unauthenticated install cumulus-netq 
-      when: citc is undefined
-
-#    - name: Install NetQ
-#      apt:
-#        name: cumulus-netq 
-#        update_cache: yes
-#      register: install_netq
+#    - name: Install NetQ 1.4
+#      command: apt-get -y --allow-unauthenticated install cumulus-netq 
 #      when: citc is undefined
+
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq 
+        update_cache: yes
+        state: present
+      register: install_netq
+      when: citc is undefined
 
     - name: Enable NetQ Service
       service:
@@ -169,6 +170,7 @@
     - name: Install NetQ, DockerCE, ifupdown2, pip
       apt:
         name: "{{item}}"
+        state: present
         update_cache: yes
       with_items:
         - docker-ce
