@@ -110,7 +110,7 @@
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
-        state: latest
+        state: present
         update_cache: yes
         
      #update netq
