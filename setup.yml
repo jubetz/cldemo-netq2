@@ -105,6 +105,21 @@
         timeout: 30
         delay: 5
       when: mgmtVRF.changed
+    
+    #update netq
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
+        state: latest
+        update_cache: yes
+        
+     #update netq
+    - name: Install cumulus-netq
+      apt:
+        name: cumulus-netq
+        state: latest
+        update_cache: yes
+      register: installNetQ
 
 - hosts: servers
   become: yes
@@ -114,15 +129,18 @@
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
 
+    # update netq
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
         state: present
         update_cache: yes
-
+    
+    # update netq
     - name: Install cumulus-netq
       apt:
         name: cumulus-netq
+        state: latest
         update_cache: yes
       register: installNetQ
 
