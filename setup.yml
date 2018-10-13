@@ -107,19 +107,19 @@
       when: mgmtVRF.changed
     
     #update netq
-    #- name: Add Cumulus Repo
-    #  apt_repository:
-    #    repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
-    #    state: present
-    #    update_cache: yes
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
+        state: present
+        update_cache: yes
         
     #update netq
-    #- name: Install cumulus-netq
-    #  apt:
-    #    name: cumulus-netq
-    #    state: latest
-    #    update_cache: yes
-    #  register: installNetQ
+    - name: Install cumulus-netq
+      apt:
+        name: cumulus-netq
+        state: latest
+        update_cache: yes
+      register: installNetQ
 
 - hosts: servers
   become: yes
@@ -130,30 +130,34 @@
         state: present
 
     # update netq
-    #- name: Add Cumulus Repo
-    #  apt_repository:
-    #    repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
-    #    state: present
-    #    update_cache: yes
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
+        state: present
+        update_cache: yes
     
     # update netq
-    #- name: Install cumulus-netq
-    #  apt:
-    #    name: cumulus-netq
-    #    state: latest
-    #    update_cache: yes
-    #  register: installNetQ
+    - name: Install cumulus-netq
+      apt:
+        name: cumulus-netq
+        state: latest
+        update_cache: yes
+      register: installNetQ
 
     - name: Install LLDP, traceroute
       apt:
-        name: "{{ item }}"
+        name: lldpd
         state: installed
         update_cache: no
-      with_items:
-        - lldpd
-        - traceroute
-
-
+      register: installLLDP
+        
+     - name: Install traceroute
+       apt:
+        name: traceroute
+        state: installed
+        update_cache: no
+      register: installTraceroute
+     
     - name: Install NTP
       apt:
         name: ntp
