@@ -145,7 +145,6 @@
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
-        state: present
         update_cache: yes 
       when: citc is undefined
 
