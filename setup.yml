@@ -144,14 +144,14 @@
         update_cache: yes
       register: installNetQ
 
-    - name: Install LLDP, traceroute
+    - name: Install LLDP
       apt:
         name: lldpd
         state: installed
         update_cache: no
       register: installLLDP
         
-     - name: Install traceroute
+    - name: Install traceroute
        apt:
         name: traceroute
         state: installed
