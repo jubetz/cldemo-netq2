@@ -51,6 +51,7 @@
     - name: Install NetQ
       apt:
         name: cumulus-netq
+        state: present
         update_cache: yes
       register: install-netq
       when: citc is undefined
