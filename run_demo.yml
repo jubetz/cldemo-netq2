@@ -44,7 +44,7 @@
     - name: Add Cumulus Repo
       apt_repository:
         repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
-        update_cache: no
+        update_cache: yes
       when: citc is undefined
 
     - name: Install NetQ
