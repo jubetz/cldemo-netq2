@@ -184,7 +184,6 @@
       async: 0
       poll: 0
       ignore_errors: true
-      when: reboot.changed
 
   handlers:
     - name: restart frr service
