@@ -40,11 +40,9 @@ Using Libvirt+KVM
 * Rename `Vagrantfile-kvm` to `Vagrantfile` replacing the existing Vagrantfile that is used for Virtualbox.
 * Install the Vagrant mutate plugin with 
 `vagrant plugin install vagrant-mutate`
-* Convert the existing NetQ telemetry server box image to a libvirt compatible version.   
-`vagrant mutate cumulus-netq-telemetry-server-amd64-1.3.0-vagrant.box libvirt`
-* Rename the new Vagrant box image by changing the Vagrant directory name.  
-`mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.3.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
-
+* Add the downloaded box to vagrant via:  
+`cumulus-netq-server-1.4.0-ts-amd64-libvirt.box --name=cumulus/ts`  
+**Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant)
 
 Using Cumulus in the Cloud
 ------------------------
