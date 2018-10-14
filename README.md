@@ -41,7 +41,7 @@ Using Libvirt+KVM
 * Install the Vagrant mutate plugin with 
 `vagrant plugin install vagrant-mutate`
 * Add the downloaded box to vagrant via:  
-`cumulus-netq-server-1.4.0-ts-amd64-libvirt.box --name=cumulus/ts`  
+`vagrant box add cumulus-netq-server-1.4.0-ts-amd64-libvirt.box --name=cumulus/ts`  
 **Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant)
 
 Using Cumulus in the Cloud
