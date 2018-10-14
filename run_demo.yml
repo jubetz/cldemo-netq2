@@ -69,7 +69,7 @@
       apt:
         name: cumulus-netq 
         update_cache: yes
-        state: present
+        state: latest
       register: install_netq
       when: citc is undefined
 
