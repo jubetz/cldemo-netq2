@@ -179,12 +179,6 @@
     - name: Restart NetQ Agent
       command: netq config restart agent
       
-    - name: reboot
-      command: /sbin/shutdown -r +1
-      async: 0
-      poll: 0
-      ignore_errors: true
-
   handlers:
     - name: restart frr service
       service:
