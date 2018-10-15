@@ -154,7 +154,7 @@
     - name: Install traceroute
       apt:
         name: traceroute
-        state: installed
+        state: present
         update_cache: no
       register: installTraceroute
      
