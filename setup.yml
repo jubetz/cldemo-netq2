@@ -200,7 +200,6 @@
         block: |
           /sbin/ethtool -s eth1 speed 1000 duplex full
           /sbin/ethtool -s eth2 speed 1000 duplex full
-          systemctl restart networking
 
 - hosts: network
   become: yes
