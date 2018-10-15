@@ -147,7 +147,7 @@
     - name: Install LLDP
       apt:
         name: lldpd
-        state: installed
+        state: present
         update_cache: no
       register: installLLDP
         
