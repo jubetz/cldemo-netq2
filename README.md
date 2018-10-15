@@ -319,14 +319,18 @@ And view the changes to the container environment
 
 You will see `apache_web` from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
 ```
-cumulus@server03:~$ netq server03 show docker container changes 
+cumulus@server03:~$ netq server03 show docker container changes
 
 Matching container records:
 Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
                                                                      me
 -------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
-test                 server03          172.17.0.2           True     bridge                     Del        26.601836s
-test                 server03          172.17.0.2           True     bridge                     Add        33.287585s
+test                 server03          172.17.0.2           True     bridge                     Del        4.503862s
+test                 server03          172.17.0.2           True     bridge                     Add        11.463860s
+apache_web.3.qwgwu4a server03          10.255.0.8           False    ingress    apache_web      Add        4m:33.722s
+5isy9cj1z5snx9ui8n
+cumulus-roh          server03          10.0.0.33/32,        False    host                       Add        5m:33.697s
+                                       192.168.0.33/24
 ```
 
 To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on.  
