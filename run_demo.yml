@@ -166,8 +166,16 @@
         update_cache: no
         state: present
       when: citc is undefined
+      
+    - name: Install NetQ
+      apt:
+        name: cumulus-netq 
+        update_cache: yes
+        state: latest
+      register: install_netq
+      when: citc is undefined
 
-    - name: Install NetQ, DockerCE, ifupdown2, pip
+    - name: Install DockerCE, ifupdown2, pip
       apt:
         name: "{{item}}"
         state: present
@@ -175,7 +183,6 @@
       with_items:
         - docker-ce
         - ifupdown2
-        - cumulus-netq
         - python-pip
 
     - name: Install docker-py module
