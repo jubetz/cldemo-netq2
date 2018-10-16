@@ -333,3 +333,15 @@
   tasks:
     - name: Deploy Apache Containers
       command: docker service create --name apache_web --replicas 4 --publish 8080:80 php:5.6-apache
+      
+- hosts: all
+  become: yes
+  
+  tasks:
+    - name: Pause for a moment (maybe we don't need this)
+      pause:
+        seconds: 5
+      
+    - name: Restart all netq agents
+      command: netq config restart agent
+      
