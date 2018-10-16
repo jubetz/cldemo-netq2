@@ -184,11 +184,11 @@
   become: yes
   
   tasks:
-    - name: Pause to let NetQ service to start
+    - name: Pause for a moment (maybe we don't need this)
       pause:
         seconds: 5
       
-    - name: Restart netq agents
+    - name: Restart all netq agents
       command: netq config restart agent
 
   handlers:
