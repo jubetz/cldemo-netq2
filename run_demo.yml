@@ -77,8 +77,8 @@
       command: netq config add server 192.168.0.254
       when: citc is undefined
 
-    - name: Restart NetQ Agent
-      command: netq config restart agent
+   # - name: Restart NetQ Agent
+   #   command: netq config restart agent
 
     - name: reboot
       command: /sbin/shutdown -r +1
@@ -178,7 +178,19 @@
 
     - name: Restart NetQ Agent
       command: netq config restart agent
+
+
+- hosts: all
+  become: yes
+  
+  tasks:
+    - name: Pause to let NetQ service to start
+      pause:
+        seconds: 5
       
+    - name: Restart netq agents
+      command: netq config restart agent
+
   handlers:
     - name: restart frr service
       service:
