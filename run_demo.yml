@@ -178,19 +178,7 @@
 
     - name: Restart NetQ Agent
       command: netq config restart agent
-
-
-- hosts: all
-  become: yes
-  
-  tasks:
-    - name: Pause for a moment (maybe we don't need this)
-      pause:
-        seconds: 5
       
-    - name: Restart all netq agents
-      command: netq config restart agent
-
   handlers:
     - name: restart frr service
       service:
@@ -206,3 +194,15 @@
       service:
         name: frr
         state: reloaded
+
+- hosts: all
+  become: yes
+  
+  tasks:
+    - name: Pause for a moment (maybe we don't need this)
+      pause:
+        seconds: 5
+      
+    - name: Restart all netq agents
+      command: netq config restart agent
+
