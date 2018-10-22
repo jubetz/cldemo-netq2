@@ -80,12 +80,12 @@
    # - name: Restart NetQ Agent
    #   command: netq config restart agent
 
-    - name: reboot
-      command: /sbin/shutdown -r +1
-      async: 0
-      poll: 0
-      ignore_errors: true
-      when: reboot.changed
+   # - name: reboot
+   #   command: /sbin/shutdown -r +1
+   #   async: 0
+   #   poll: 0
+   #   ignore_errors: true
+   #   when: reboot.changed
 
   handlers:
     - name: restart LLDP
@@ -195,14 +195,14 @@
         name: frr
         state: reloaded
 
-- hosts: all
-  become: yes
-  
-  tasks:
-    - name: Pause for a moment (servers rebooting)
-      pause:
-        seconds: 30
-      
-    - name: Restart all netq agents
-      command: netq config restart agent
+#- hosts: all
+#  become: yes
+#  
+#  tasks:
+#    - name: Pause for a moment (servers rebooting)
+#      pause:
+#        seconds: 30
+#      
+#    - name: Restart all netq agents
+#      command: netq config restart agent
 
