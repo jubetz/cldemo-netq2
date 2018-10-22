@@ -77,11 +77,9 @@
       command: netq config add server 192.168.0.254
       when: citc is undefined
 
-   # - name: Restart NetQ Agent
-   #   command: netq config restart agent
-
     - name: reboot
       reboot:
+        pre_reboot_delay: 60
    #   async: 0
    #   poll: 0
    #   ignore_errors: true
@@ -147,10 +145,6 @@
         repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
         update_cache: yes 
       when: citc is undefined
-
- #   - name: Install NetQ 1.4
- #     command: apt-get -y --allow-unauthenticated install cumulus-netq 
- #     when: citc is undefined
 
     - name: Install/Update NetQ
       apt:
