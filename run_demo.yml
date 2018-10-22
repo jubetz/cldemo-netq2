@@ -198,12 +198,14 @@
 #need to restart all the netq agents to cleanup interface checks.
 - hosts: servers
   become: yes
-        
+  
+  tasks:
     - name: Restart all netq agents
       command: netq config restart agent
 
 - hosts: network
   become: yes
-        
+  
+  tasks:
     - name: Restart all netq agents
       command: netq config restart agent
