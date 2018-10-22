@@ -195,14 +195,15 @@
         name: frr
         state: reloaded
 
-- hosts: all
+#need to restart all the netq agents to cleanup interface checks.
+- hosts: servers
   become: yes
-  
-  tasks:
-    - name: Pause for a moment (servers rebooting)
-      pause:
-        seconds: 5
-      
+        
     - name: Restart all netq agents
       command: netq config restart agent
 
+- hosts: network
+  become: yes
+        
+    - name: Restart all netq agents
+      command: netq config restart agent
