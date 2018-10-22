@@ -199,9 +199,9 @@
   become: yes
   
   tasks:
-    - name: Pause for a moment (maybe we don't need this)
+    - name: Pause for a moment (servers rebooting)
       pause:
-        seconds: 5
+        seconds: 30
       
     - name: Restart all netq agents
       command: netq config restart agent
