@@ -164,7 +164,7 @@ net del bgp l2vpn evpn vni 13
 net commit
 ```
 
-Verify that EVPN is functional and shows "Total Sessions: 8" (this may take up to 30 seconds)
+Verify that EVPN is functional (this may take up to 30 seconds)
 `netq check evpn`
 
 Now, on leaf01 shut down the link to spine01 
