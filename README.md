@@ -138,7 +138,7 @@ Path MTU: 9000
 
 ```
 
-On leaf01 misconfigure EVPN
+On leaf01 add an incomplete VNI configuration
 ```
 net add bgp l2vpn evpn vni 14
 net commit
@@ -147,7 +147,7 @@ net commit
 And check that BGP is still working as expected
 `netq check bgp`
 
-And that EVPN is misconfigured 
+And that 'check evpn' is indicating a problem with the configuration
 `netq check evpn`
 ```
 cumulus@leaf01:mgmt-vrf:~$ netq check evpn
