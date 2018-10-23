@@ -1,5 +1,5 @@
 #!/bin/sh
-sudo sh -c 'echo "deb http://httpredir.debian.org/debian jessie main" > /etc/apt/sources.list.d/jessie.list'
+sudo sh -c 'echo "deb http://ftp.debian.org/debian jessie main" > /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://security.debian.org/ jessie/updates main" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://repo3.cumulusnetworks.com/repo Jessie-supplemental upstream" > /etc/apt/sources.list.d/jessie_cl.list'
