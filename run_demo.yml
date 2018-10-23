@@ -61,10 +61,6 @@
         state: present
       when: citc is undefined
 
-#    - name: Install NetQ 1.4
-#      command: apt-get -y --allow-unauthenticated install cumulus-netq 
-#      when: citc is undefined
-
     - name: Install NetQ
       apt:
         name: cumulus-netq 
@@ -86,8 +82,6 @@
         state: restarted
       when: citc is undefined
 
-
-
 #    - name: Check if Netqd is running in the VRF
 #      shell: "vrf task list | grep netqd"
 #      register: netqd_vrf
@@ -104,9 +98,6 @@
 
     - name: Add netq server IP
       command: netq config add server 192.168.0.254 vrf mgmt
-
-    - name: Restart NetQ Agent
-      command: netq config restart agent
 
   handlers:
     - name: restart frr service
@@ -175,15 +166,23 @@
       register: install_netq
       when: citc is undefined
 
-    - name: Install DockerCE, ifupdown2, pip
+    - name: Install DockerCE
       apt:
-        name: "{{item}}"
-        state: present
+        name: docker-ce 
         update_cache: yes
-      with_items:
-        - docker-ce
-        - ifupdown2
-        - python-pip
+        state: present
+
+    - name: Install ifdown2
+      apt:
+        name: ifdown2
+        update_cache: yes
+        state: present
+
+    - name: Install pip
+      apt:
+        name: python-pip
+        update_cache: yes
+        state: present
 
     - name: Install docker-py module
       pip:
@@ -334,14 +333,17 @@
     - name: Deploy Apache Containers
       command: docker service create --name apache_web --replicas 4 --publish 8080:80 php:5.6-apache
       
-- hosts: all
+- hosts: network
   become: yes
   
-  tasks:
-    - name: Pause for a moment (maybe we don't need this)
-      pause:
-        seconds: 5
+  tasks:      
+    - name: Restart all netq agents
+      command: netq config restart agent
       
+- hosts: servers
+  become: yes
+  
+  tasks:      
     - name: Restart all netq agents
       command: netq config restart agent
       
