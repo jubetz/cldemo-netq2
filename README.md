@@ -140,7 +140,7 @@ Path MTU: 9000
 
 On leaf01 misconfigure EVPN
 ```
-net add bgp l2vpn evpn vni 14
+net add bgp l2vpn evpn vni 14 rd 1:1
 net commit
 ```
 
