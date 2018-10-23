@@ -98,7 +98,7 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ansible_lsb.release | version_compare('3.5', '>=') }}"
+        that: "{{ansible_lsb.release is version_compare('3.5', '>=') }}"
         msg: >
           "Cumulus Linux version must be 3.5 or later.
           Version {{ansible_lsb.release}} detected"
