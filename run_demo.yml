@@ -172,9 +172,9 @@
         update_cache: yes
         state: present
 
-    - name: Install ifdown2
+    - name: Install ifupdown2
       apt:
-        name: ifdown2
+        name: ifupdown2
         update_cache: yes
         state: present
 
