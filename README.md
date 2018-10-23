@@ -140,7 +140,7 @@ Path MTU: 9000
 
 On leaf01 misconfigure EVPN
 ```
-net add bgp l2vpn evpn vni 13 rd 1:1
+net add bgp l2vpn evpn vni 14
 net commit
 ```
 
@@ -151,16 +151,17 @@ And that EVPN is misconfigured
 `netq check evpn`
 ```
 cumulus@leaf01:mgmt-vrf:~$ netq check evpn
-Total Nodes: 10, Failed Nodes: 1, Total Sessions: 8 , Failed BGP Sessions: 0, Total VNIs: 2
+Total Nodes: 10, Failed Nodes: 1, Total Sessions: 8 , Failed BGP Sessions: 0, Total VNIs: 3
 Hostname          Peer Name         Peer Hostname     Error           Last Changed
 ----------------- ----------------- ----------------- --------------- -------------------------
-leaf01            -                 -                 VNI 13 not in k 3.549852s
-                                                      ernel          
+leaf01            -                 -                 VNI 14 not in k 3.38594s
+                                                      ernel
+
 ```
 
 Correct the EVPN misconfiguration
 ```
-net del bgp l2vpn evpn vni 13
+net del bgp l2vpn evpn vni 14
 net commit
 ```
 
