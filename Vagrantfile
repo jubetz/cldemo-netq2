@@ -318,6 +318,9 @@ Vagrant.configure("2") do |config|
 
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
       vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 
@@ -354,7 +357,7 @@ end
   config.vm.define "oob-mgmt-switch" do |device|
     device.vm.hostname = "oob-mgmt-switch"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_oob-mgmt-switch"
@@ -426,6 +429,31 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc14', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc15', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc16', 'allow-all']
+	 
+	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype13", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype14", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype15", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype16", "virtio"]
+	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]	    
 
 end
 
@@ -471,7 +499,7 @@ end
   config.vm.define "exit02" do |device|
     device.vm.hostname = "exit02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit02"
@@ -527,6 +555,27 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]	    
 
 end
 
@@ -568,7 +617,7 @@ end
   config.vm.define "exit01" do |device|
     device.vm.hostname = "exit01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit01"
@@ -624,6 +673,28 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -665,7 +736,7 @@ end
   config.vm.define "spine02" do |device|
     device.vm.hostname = "spine02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine02"
@@ -713,6 +784,28 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc8', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc9', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -752,7 +845,7 @@ end
   config.vm.define "spine01" do |device|
     device.vm.hostname = "spine01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine01"
@@ -800,6 +893,26 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc8', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc9', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -839,7 +952,7 @@ end
   config.vm.define "leaf04" do |device|
     device.vm.hostname = "leaf04"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf04"
@@ -895,6 +1008,28 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -936,7 +1071,7 @@ end
   config.vm.define "leaf02" do |device|
     device.vm.hostname = "leaf02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf02"
@@ -992,6 +1127,28 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
+
 
 end
 
@@ -1033,7 +1190,7 @@ end
   config.vm.define "leaf03" do |device|
     device.vm.hostname = "leaf03"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf03"
@@ -1089,6 +1246,27 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 
@@ -1130,7 +1308,7 @@ end
   config.vm.define "leaf01" do |device|
     device.vm.hostname = "leaf01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf01"
@@ -1186,6 +1364,27 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
+	    
+	    	 # workaround for 3.7.0 / CM-22592
+	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
+	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
+	 #
+	 # back this out when new 3.7 is released
+	vbox.customize ["modifyvm", :id, "--nictype1", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
+	vbox.customize ["modifyvm", :id, "--nictype3", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype4", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype5", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype6", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype7", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype8", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype9", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype10", "virtio"] 
+	vbox.customize ["modifyvm", :id, "--nictype11", "virtio"] 
+    	vbox.customize ["modifyvm", :id, "--nictype12", "virtio"] 
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 
@@ -1251,6 +1450,9 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 
@@ -1263,8 +1465,6 @@ end
       # Run Any Extra Config
       device.vm.provision :shell , path: "./helper_scripts/config_server.sh"
 
-
-
       # Apply the interface re-map
       device.vm.provision "file", source: "./helper_scripts/apply_udev.py", destination: "/home/vagrant/apply_udev.py"
       device.vm.provision :shell , inline: "chmod 755 /home/vagrant/apply_udev.py"
@@ -1276,7 +1476,6 @@ end
       device.vm.provision :shell , inline: "/home/vagrant/apply_udev.py -vm "
       device.vm.provision :shell , inline: "/home/vagrant/apply_udev.py -s"
       device.vm.provision :shell , :inline => $script
-
 
 
   end
@@ -1320,7 +1519,6 @@ end
 
       # Run Any Extra Config
       device.vm.provision :shell , path: "./helper_scripts/config_server.sh"
-
 
 
       # Apply the interface re-map
@@ -1367,6 +1565,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
+
 
 end
 
@@ -1426,6 +1625,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
 
+
 end
 
       # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
@@ -1484,6 +1684,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
 
+
 end
 
       # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
@@ -1517,7 +1718,7 @@ end
   config.vm.define "internet" do |device|
     device.vm.hostname = "internet"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.5.0"
+    device.vm.box_version = "3.7.0"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_internet"
@@ -1546,6 +1747,9 @@ end
       vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
       vbox.customize ["modifyvm", :id, "--nictype3", "virtio"]
       vbox.customize ["modifyvm", :id, "--nictype4", "virtio"]
+	    	#make sure this Mac addr is random for the NAT interface in virtual box
+	#else we end up having same chassisid in lldpd 
+        vbox.customize ["modifyvm", :id, "--macaddress1", "auto"]
 
 end
 

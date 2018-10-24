@@ -25,14 +25,14 @@ Prerequisites
 * Running this simulation roughly 10G of RAM.
 * Internet connectivity is required from the hypervisor. Multiple packages are installed on both the switches and servers when the lab is created.
 * Download this repository locally with `git clone https://github.com/CumulusNetworks/cldemo-netq.git` or if you do not have Git installed, [Download the zip file](https://github.com/CumulusNetworks/cldemo-netq/archive/master.zip)
-* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant. You need to be logged into the site to access this.  Choose NetQ 1.3.
-* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release [1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/).
+* Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant. You need to be logged into the site to access this.  Choose NetQ 1.4.
+* Install [Vagrant](https://releases.hashicorp.com/vagrant/).  Vagrant 2.0.1+ is needed to support VirtualBox 5.2.x
 * Install [Virtualbox](https://www.virtualbox.org/wiki/VirtualBox) or [Libvirt+KVM](https://libvirt.org/drvqemu.html) hypervisors.
 
 Using Virtualbox
 ------------------------
 * Add the downloaded box to vagrant via:  
-`vagrant box add cumulus-netq-telemetry-server-amd64-1.3.0-vagrant.box --name=cumulus/ts`  
+`vagrant box add cumulus-netq-server-1.4.0-ts-amd64-vbox.box --name=cumulus/ts`  
 **Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant)
 
 Using Libvirt+KVM
@@ -40,11 +40,9 @@ Using Libvirt+KVM
 * Rename `Vagrantfile-kvm` to `Vagrantfile` replacing the existing Vagrantfile that is used for Virtualbox.
 * Install the Vagrant mutate plugin with 
 `vagrant plugin install vagrant-mutate`
-* Convert the existing NetQ telemetry server box image to a libvirt compatible version.   
-`vagrant mutate cumulus-netq-telemetry-server-amd64-1.3.0-vagrant.box libvirt`
-* Rename the new Vagrant box image by changing the Vagrant directory name.  
-`mv $HOME/.vagrant.d/boxes/cumulus-netq-telemetry-server-amd64-1.3.0-vagrant/ $HOME/.vagrant.d/boxes/cumulus-VAGRANTSLASH-ts`
-
+* Add the downloaded box to vagrant via:  
+`vagrant box add cumulus-netq-server-1.4.0-ts-amd64-libvirt.box --name=cumulus/ts`  
+**Note:** You must first manually download the Telemetry Server Vagrant box file from the [Cumulus Networks Download Page](https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&hypervisor=Vagrant)
 
 Using Cumulus in the Cloud
 ------------------------
@@ -104,9 +102,17 @@ Notice the path from server01 to server03 is direct, while server01 to server04 
 
 From **leaf01**:
 * `netq check bgp`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 0, Total Sessions: 16, Failed Sessions: 0
+```
 * `netq check evpn`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check evpn
+Total Nodes: 10, Failed Nodes: 0, Total Sessions: 8, Failed Sessions: 0, Total VNIs: 2
+```
 * `ip route show | netq resolve` to view the routing table with NetQ hostname resolution
-* `netq server03 show ip neighbors` to view the ARP table of server03. This should include an entry for `10.1.3.101` (*note:* the MAC address you see may be different from these examples)
+* `netq server03 show ip neighbors` to view the ARP table of server01. This should include an entry for `10.1.3.101` (*note:* the MAC address you see may be different from these examples)
 ```
 cumulus@leaf01:mgmt-vrf:~$ netq server03 show ip neighbors
 Matching neighbor records are:
@@ -117,32 +123,45 @@ IP Address       Hostname         Interface            Mac Address              
 10.1.3.14        server03         uplink               32:3e:76:e2:7b:ae        default          no     6m:58.210s
 192.168.0.254    server03         eth0                 44:38:39:00:00:5f        default          no     9m:57.746s
 ```
-* `netq trace 44:38:39:00:00:03 from leaf03` (this should be the MAC address of server01's `uplink` bond interface)
+* `netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty` (this should be the MAC address of server01's `uplink` bond interface)
 ```
-cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 from leaf03
-leaf03 -- leaf03:vni13 -- leaf03:swp51 -- spine01:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
-                                       -- spine01:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
-                       -- leaf03:swp52 -- spine02:swp1 -- leaf01:vni13 -- leaf01:bond01 -- server01
-                                       -- spine02:swp2 -- leaf02:vni13 -- leaf02:bond01 -- server01
-Path MTU is 9000
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
+Number of Paths: 4
+Number of Paths with Errors: 0
+Number of Paths with Warnings: 0
+Path MTU: 9000
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp51 -- swp3 spine01 swp1 -- swp51 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+
 ```
 
-On leaf01 misconfigure EVPN 
+On leaf01 add an incomplete VNI configuration
 ```
-net del bgp evpn advertise-all-vni
+net add bgp l2vpn evpn vni 14
 net commit
 ```
 
 And check that BGP is still working as expected
 `netq check bgp`
 
-And that EVPN is misconfigured 
+And that 'check evpn' is indicating a problem with the configuration
 `netq check evpn`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check evpn
+Total Nodes: 10, Failed Nodes: 1, Total Sessions: 8 , Failed BGP Sessions: 0, Total VNIs: 3
+Hostname          Peer Name         Peer Hostname     Error           Last Changed
+----------------- ----------------- ----------------- --------------- -------------------------
+leaf01            -                 -                 VNI 14 not in k 3.38594s
+                                                      ernel
 
+```
 
 Correct the EVPN misconfiguration
 ```
-net add bgp evpn advertise-all-vni
+net del bgp l2vpn evpn vni 14
 net commit
 ```
 
@@ -156,9 +175,30 @@ Wait 5-10 seconds for NetQ to export the data.
 
 With NetQ, check BGP again and you should see two failed sessions. 
 `netq check bgp`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 2, Total Sessions: 16 , Failed Sessions: 2, 
+Hostname          VRF             Peer Name         Peer Hostname     Reason                                        Last Changed
+----------------- --------------- ----------------- ----------------- --------------------------------------------- -------------------------
+leaf01            default         swp51             spine01           Link Admin Down                               0.990985s
+spine01           default         swp1              leaf01            Hold Timer Expired                            9.489406s
+```
 
-Again, run the NetQ traceroute that was run earlier  
-`netq trace 44:38:39:00:00:03 from leaf03`  
+Again, run the NetQ traceroute that was run earlier:  
+`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`
+```
+cumulus@leaf01:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
+Number of Paths: 4
+Number of Paths with Errors: 1
+  Path: 4 Path Incomplete
+Number of Paths with Warnings: 0
+Path MTU: 9000
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+ vni: 13 leaf03 bond01 -- uplink server01 uplink 
+```
 and notice that there are two paths through spine02 but only a single path through spine01 now.
 
 View the changes to the fabric as a result of shutting down the interface  
@@ -174,14 +214,45 @@ net commit
 
 If we check BGP again, we still have only two failed sessions: leaf01 and spine01.  
 `netq check bgp`
+```
+cumulus@spine02:mgmt-vrf:~$ netq check bgp
+Total Nodes: 10, Failed Nodes: 2, Total Sessions: 16 , Failed Sessions: 2, 
+Hostname          VRF             Peer Name         Peer Hostname     Reason                                        Last Changed
+----------------- --------------- ----------------- ----------------- --------------------------------------------- -------------------------
+leaf01            default         swp51             spine01           Link Admin Down                               0.65267s
+spine01           default         swp1              leaf01            RA not configured(?)                          0.65404s
+```
 
 If we run the traceroute again, we will see the MTU failure in the path 
-`netq trace 44:38:39:00:00:03 from leaf03`  
+`netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty`  
 *If you need to get the MAC address again use `netq server03 show ip neighbors` and use the entry for `10.1.3.101`*
+```
+cumulus@spine02:mgmt-vrf:~$ netq trace 44:38:39:00:00:03 vlan 13 from leaf03 pretty
+Number of Paths: 4
+  Inconsistent path mtu among paths
+Number of Paths with Errors: 1
+  Path: 4 Path Incomplete
+Number of Paths with Warnings: 2
+  Path: 1 MTU mismatch between leaf03:swp52 (9216) and spine02:swp3 (1500)
+  Path: 2 MTU mismatch between leaf03:swp52 (9216) and spine02:swp3 (1500)
+Path MTU: 1500
+
+ leaf03 vni: 13 swp52 -- swp3 spine02 swp2 -- swp52 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+                swp52 -- swp3 spine02 swp1 -- swp52 vni: 13 leaf01 bond01 -- uplink server01 uplink 
+ leaf03 vni: 13 swp51 -- swp3 spine01 swp2 -- swp51 vni: 13 leaf02 bond01 -- uplink server01 uplink 
+ vni: 13 leaf03 bond01 -- uplink server01 uplink 
+```
 
 Again, you can see the changes with  
 `netq spine02 show interface changes between 1s and 5m`
+```
+cumulus@spine02:mgmt-vrf:~$ netq spine02 show interface changes between 1s and 5m
 
+Matching link records:
+Hostname          Interface                 Type             State      VRF             Details                             DB State   Last Changed
+----------------- ------------------------- ---------------- ---------- --------------- ----------------------------------- ---------- -------------------------
+spine02           swp3                      swp              up         default         MTU:1500                            Add        1m:21.883s
+```
 
 ### Docker Swarm + Routing on the Host Demo
 The second demo relies on [Cumulus Host Pack](https://cumulusnetworks.com/products/host-pack/) to install FRR and NetQ on each server. The servers speak eBGP unnumbered to the local top of rack switches.
@@ -201,7 +272,7 @@ After BGP is configured on the hosts, [Docker CE](https://www.docker.com/communi
 
 Within Docker Swarm, server01 acts as the _Swarm Manager_ while server02, server03 and server04 act as _Swarm Workers_.
 
-Swarm deploys an Apache service. The service creates three apache containers which are deployed on various nodes in the swarm.
+Swarm deploys an Apache service. The service creates four apache containers which are deployed on various nodes in the swarm.
 
 **To provision this demo**, from the oob-mgmt-server 
 * `cd docker`
@@ -209,7 +280,7 @@ Swarm deploys an Apache service. The service creates three apache containers whi
 
 From **server01**: 
 * `sudo docker node ls` to verify that all four servers are in the swarm
-* `sudo docker service ps apache_web` to see the three apache containers deployed
+* `sudo docker service ps apache_web` to see the four apache containers deployed
 
 Log into to FRR on **server01**: 
 * `sudo docker exec -it cumulus-roh /usr/bin/vtysh` to attach to the FRR process
@@ -235,12 +306,13 @@ Wait 10-20 seconds for NetQ to export the data and look at the impact of removin
 The red indicates that removing leaf03 from service would bring down server03 and the attached containers
 ```
 cumulus@server03:~$ netq leaf03 show impact docker service apache_web
-apache_web -- apache_web.3.8wc5zlr5f07qk7yfbb9ggoq63 -- server02:eth1:eth1 -- swp2:swp2:leaf01
+apache_web -- apache_web.2.i46cc2s6249020xw4z8ct0id3 -- server02:eth1:eth1 -- swp2:swp2:leaf01
                                                      -- server02:eth2:eth2 -- swp2:swp2:leaf02
-           -- apache_web.2.y5f8qtv0ev3pw8kglqtbj7zof -- server01:eth1:eth1 -- swp1:swp1:leaf01
+           -- apache_web.3.qwgwu4a5isy9cj1z5snx9ui8n -- server03:eth1:eth1 -- swp1:swp1:leaf03
+           -- apache_web.4.ifxyjh86gbz2ycjk6k2qkbsh3 -- server04:eth1:eth1 -- swp2:swp2:leaf03
+                                                     -- server04:eth2:eth2 -- swp2:swp2:leaf04
+           -- apache_web.1.vxwdzbrrhynol1qdx9lpiiroz -- server01:eth1:eth1 -- swp1:swp1:leaf01
                                                      -- server01:eth2:eth2 -- swp1:swp1:leaf02
-           -- apache_web.1.0hzzlrw7u0alwrcaccxcs5g0n -- server03:eth1:eth1 -- swp1:swp1:leaf03
-                                                     -- server03:eth2:eth2 -- swp1:swp1:leaf04
 ```
 
 Now, still on **server03**, run the Docker "hello world" example to create and destroy a container.  
@@ -250,71 +322,101 @@ And view the changes to the container environment
 `netq server03 show docker container changes`
 
 You will see `apache_web` from the Docker Swarm, `cumulus-roh` the routing on the host container and `test` the container we just created and destroyed. 
+```
+cumulus@server03:~$ netq server03 show docker container changes
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
+test                 server03          172.17.0.2           True     bridge                     Del        4.503862s
+test                 server03          172.17.0.2           True     bridge                     Add        11.463860s
+apache_web.3.qwgwu4a server03          10.255.0.8           False    ingress    apache_web      Add        4m:33.722s
+5isy9cj1z5snx9ui8n
+cumulus-roh          server03          10.0.0.33/32,        False    host                       Add        5m:33.697s
+                                       192.168.0.33/24
+```
 
 To view changes to Docker Swarm we can change the number of nodes `apache_web` is running on.  
 From **server01** run:  
 `sudo docker service scale apache_web=2` 
 
-This will change the environment from 3 apache_web containers to two.
+This will change the environment from four apache_web containers to two.
 
 View the updated cluster with `netq show docker service` and notice that only 2 replicas are running.
 ```
 cumulus@server01:~$ netq show docker service
-Matching service records are:
-Service Name    Manager    Cluster    Mode          Replicas  Running
---------------  ---------  ---------  ----------  ----------  ---------
-apache_web      server01   default    Replicated           2  2
+
+Matching service records:
+Service Name    Manager    Cluster    Mode       Replicas                           Running
+--------------- ---------- ---------- ---------- ---------------------------------- ----------
+apache_web      server01   default    Replicated 2                                  2
+
 ```
 
-
-Next, scale the swarm up to 4 containers. Still on **server01** run:  
-`sudo docker service scale apache_web=4`
+Next, scale the swarm up to 5 containers. Still on **server01** run:  
+`sudo docker service scale apache_web=5`
 
 Wait up to 30 seconds and see the cluster change 
 ```
 cumulus@server01:~$ netq show docker service
-Matching service records are:
-Service Name    Manager    Cluster    Mode          Replicas  Running
---------------  ---------  ---------  ----------  ----------  ---------
-apache_web      server01   default    Replicated           4  4
+
+Matching service records:
+Service Name    Manager    Cluster    Mode       Replicas                           Running
+--------------- ---------- ---------- ---------- ---------------------------------- ----------
+apache_web      server01   default    Replicated 5                                  5
+cumulus@server01:~$ 
 ```
 
+NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but three "Add" entries should exist)
 
-NetQ also allows us to see the changes to the specific service (note: the specific servers listed here may be different in your environment, but two "Add" entries should exist) 
+`netq show docker container service apache_web changes between 1s and 5m`
 ```
 cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
-Matching container records are:
-Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
--------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
-apache_web.4.lqxi3jo server03   10.255.0.9        False    ingress        apache_web     Add      2m:49.193s
-z7mbb60mm5dxrkkntt
-apache_web.3.s470yqg server01   10.255.0.10       False    ingress        apache_web     Add      3m:13.973s
-5n0q0lgtt0jg2ep6w5
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
+apache_web.4.nw4lp75 server03          10.255.0.12          False    ingress    apache_web      Add        21.959066s
+xi9n541vsxcnxm8co2
+apache_web.5.cr5pvdi server03          10.255.0.13          False    ingress    apache_web      Add        22.957091s
+qh4cyw492fmu73kg54
+apache_web.3.ixklc4c server04          10.255.0.11          False    ingress    apache_web      Add        23.538899s
+9wlcvuhiqlphhskao4
 ```
 
-Going further back in time we can also see the cluster being scaled down 
+Going further back in time we can also see when the cluster was scaled down from four to two:
 ```
-cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 10m
-Matching container records are:
-Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name   DBState  Last changed
--------------------- ---------- ----------------- -------- -------------- -------------- -------- ---------------
-apache_web.4.lqxi3jo server03   10.255.0.9        False    ingress        apache_web     Add      4m:1.125s
-z7mbb60mm5dxrkkntt
-apache_web.3.s470yqg server01   10.255.0.10       False    ingress        apache_web     Add      4m:25.792s
-5n0q0lgtt0jg2ep6w5
-apache_web.3.y241cpk server01   10.255.0.9        False    ingress        apache_web     Del      8m:50.497s
-feozzjen732hplx8z7
+cumulus@server01:~$ netq show docker container service apache_web changes between 1s and 5m
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    DBState    Last Changed
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- ---------- -------------------------
+<snip>
+apache_web.4.ifxyjh8 server04          10.255.0.7           False    ingress    apache_web      Del        1m:58.385s
+6gbz2ycjk6k2qkbsh3
+apache_web.3.qwgwu4a server03          10.255.0.10          False    ingress    apache_web      Del        1m:58.920s
+5isy9cj1z5snx9ui8n
+
 ```
 
-Finally, you can view the service in the past when only two instances were running 
+Finally, you can view the service in the past when only two instances were running.  You will likely need a different value than the example below using 3m ago.  How many minutes ago was it when you scaled back to two apache_web services?
+
+`netq show docker container service apache_web around <time>`
 ```
-cumulus@server01:~$ netq show docker container service apache_web around 15m
-Matching container records are:
-Container Name       Hostname   Container IP      IP Masq  Network Name   Service Name    UpTime
--------------------- ---------- ----------------- -------- -------------- --------------- ---------------
-apache_web.1.hbqiy94 server02   10.255.0.7        False    ingress        apache_web      0:27:26
-7e2h5dpnpybgqbqncw
-apache_web.2.vkiiim6 server04   10.255.0.8        False    ingress        apache_web      0:27:25
+cumulus@server01:~$ netq show docker container service apache_web around 3m
+
+Matching container records:
+Container Name       Hostname          Container IP         IP Masq  Network Na Service Name    Up Time
+                                                                     me
+-------------------- ----------------- -------------------- -------- ---------- --------------- -------------------------
+apache_web.1.w3ipcm5 server02          10.255.0.7           False    ingress    apache_web      0:06:10
+gl2k8adb3elid34hm0
+apache_web.2.mlh6as1 server01          10.255.0.8           False    ingress    apache_web      0:06:09
+jpradrkccldqqwem99
+cumulus@server01:~$ 
 ```
 
 

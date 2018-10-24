@@ -17,8 +17,8 @@ echo -e "\n\nauto eth0" >> /etc/network/interfaces
 echo -e "iface eth0 inet dhcp\n\n" >> /etc/network/interfaces
 
 ####### Custom Stuff
-echo "auto swp1" >> /etc/network/interfaces
-echo "iface swp1 inet static" >> /etc/network/interfaces
+echo "auto eth1" >> /etc/network/interfaces
+echo "iface eth1 inet static" >> /etc/network/interfaces
 echo "    address 192.168.0.254" >> /etc/network/interfaces
 echo "    netmask 255.255.255.0" >> /etc/network/interfaces
 
@@ -27,7 +27,7 @@ echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 # Disable AAAA records; speeds up APT for v4 only networks
 sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
-ifup swp1
+ifup eth1
 sed "s/PasswordAuthentication no/PasswordAuthentication yes/" -i /etc/ssh/sshd_config
 service ssh restart
 
