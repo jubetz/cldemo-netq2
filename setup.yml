@@ -5,7 +5,7 @@
     # Release supported by this demo.
     - name: Verify Minimum Software Version
       assert:
-        that: "{{ ansible_lsb.release | version_compare('3.4', '>=') }}"
+        that: "{{ ansible_lsb.release is version_compare('3.4', '>=') }}"
         msg: >
           "You appear to be running an older workbench.
           Please delete your current workbench by adding '/delete' to your
@@ -30,11 +30,11 @@
       register: docker
 
     - name: Clone EVPN Demo
-      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn  # yamllint disable-line rule:line-length
+      command: git clone -b evpn https://github.com/jubetz/cldemo-netq /home/cumulus/cldemo-netq/evpn  # yamllint disable-line rule:line-length
       when: evpn.stat.isdir is not defined
 
     - name: Clone Docker Demo
-      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker  # yamllint disable-line rule:line-length
+      command: git clone -b docker-roh https://github.com/jubetz/cldemo-netq /home/cumulus/cldemo-netq/docker  # yamllint disable-line rule:line-length
       when: docker.stat.isdir is not defined
 
     - name: Create Ansible Directory
@@ -54,23 +54,7 @@
         src: hosts
         dest: /etc/ansible/hosts
       become: yes
-
-
-#    - name: Install NetQ
-#      apt:
-#        name: cumulus-netq 
-#        update_cache: yes
-#      register: install_netq
-#      when: citc is undefined
-
-#    - name: Enable NetQ Service
-#      service:
-#        name: netqd
-#        enabled: yes
-#        state: started
-#      when: citc is undefined
-#      become: yes
-
+      
     - name: Restart Rsyslog
       service:
         name: rsyslog
@@ -121,6 +105,21 @@
         timeout: 30
         delay: 5
       when: mgmtVRF.changed
+    
+    #update netq
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
+        state: present
+        update_cache: yes
+        
+    #update netq
+    - name: Install cumulus-netq
+      apt:
+        name: cumulus-netq
+        state: latest
+        update_cache: yes
+      register: installNetQ
 
 - hosts: servers
   become: yes
@@ -130,28 +129,35 @@
         url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
         state: present
 
-#    - name: Add Cumulus Repo
-#      apt_repository:
-#        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
-#        state: present
-#        update_cache: yes
-
-#    - name: Install cumulus-netq
-#      apt:
-#        name: cumulus-netq
-#        update_cache: yes
-#      register: installNetQ
-
-    - name: Install LLDP, traceroute
+    # update netq
+    - name: Add Cumulus Repo
+      apt_repository:
+        repo: deb http://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
+        state: present
+        update_cache: yes
+    
+    # update netq
+    - name: Install cumulus-netq
       apt:
-        name: "{{ item }}"
-        state: installed
+        name: cumulus-netq
+        state: latest
+        update_cache: yes
+      register: installNetQ
+
+    - name: Install LLDP
+      apt:
+        name: lldpd
+        state: present
         update_cache: no
-      with_items:
-        - lldpd
-        - traceroute
-
-
+      register: installLLDP
+        
+    - name: Install traceroute
+      apt:
+        name: traceroute
+        state: present
+        update_cache: no
+      register: installTraceroute
+     
     - name: Install NTP
       apt:
         name: ntp
