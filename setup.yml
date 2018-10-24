@@ -30,11 +30,11 @@
       register: docker
 
     - name: Clone EVPN Demo
-      command: git clone -b evpn https://github.com/jubetz/cldemo-netq /home/cumulus/cldemo-netq/evpn  # yamllint disable-line rule:line-length
+      command: git clone -b evpn https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/evpn  # yamllint disable-line rule:line-length
       when: evpn.stat.isdir is not defined
 
     - name: Clone Docker Demo
-      command: git clone -b docker-roh https://github.com/jubetz/cldemo-netq /home/cumulus/cldemo-netq/docker  # yamllint disable-line rule:line-length
+      command: git clone -b docker-roh https://github.com/CumulusNetworks/cldemo-netq /home/cumulus/cldemo-netq/docker  # yamllint disable-line rule:line-length
       when: docker.stat.isdir is not defined
 
     - name: Create Ansible Directory
