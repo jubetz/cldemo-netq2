@@ -357,7 +357,7 @@ end
   config.vm.define "oob-mgmt-switch" do |device|
     device.vm.hostname = "oob-mgmt-switch"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_oob-mgmt-switch"
@@ -430,7 +430,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc15', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc16', 'allow-all']
 	 
-	 # workaround for 3.7.1 / CM-22592
+	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -499,7 +499,7 @@ end
   config.vm.define "exit02" do |device|
     device.vm.hostname = "exit02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit02"
@@ -556,7 +556,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -617,7 +617,7 @@ end
   config.vm.define "exit01" do |device|
     device.vm.hostname = "exit01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_exit01"
@@ -674,7 +674,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -736,7 +736,7 @@ end
   config.vm.define "spine02" do |device|
     device.vm.hostname = "spine02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine02"
@@ -785,7 +785,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc9', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -845,7 +845,7 @@ end
   config.vm.define "spine01" do |device|
     device.vm.hostname = "spine01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_spine01"
@@ -894,7 +894,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc9', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -952,7 +952,7 @@ end
   config.vm.define "leaf04" do |device|
     device.vm.hostname = "leaf04"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf04"
@@ -1009,7 +1009,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -1071,7 +1071,7 @@ end
   config.vm.define "leaf02" do |device|
     device.vm.hostname = "leaf02"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf02"
@@ -1128,7 +1128,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -1190,7 +1190,7 @@ end
   config.vm.define "leaf03" do |device|
     device.vm.hostname = "leaf03"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf03"
@@ -1247,7 +1247,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -1308,7 +1308,7 @@ end
   config.vm.define "leaf01" do |device|
     device.vm.hostname = "leaf01"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_leaf01"
@@ -1365,7 +1365,7 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc12', 'allow-all']
 	    
-	    	 # workaround for 3.7.1 / CM-22592
+	    	 # workaround for 3.7.2 / CM-22592
 	 # also must change 'def max_network_adapters' to 36 in this specific base.rb file
 	 # C:\HashiCorp\Vagrant\embedded\gems\2.1.4\gems\vagrant-2.1.4\plugins\providers\virtualbox\driver\base.rb
 	 #
@@ -1718,7 +1718,7 @@ end
   config.vm.define "internet" do |device|
     device.vm.hostname = "internet"
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.1"
+    device.vm.box_version = "3.7.2"
 
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_internet"
