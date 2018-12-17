@@ -20,7 +20,7 @@ Table of Contents
 * [Troubleshooting + FAQ](#troubleshooting--faq)
 
 
-Prerequisites
+Prerequisites (Note that these are for running the simulation locally, not on CITC)
 ------------------------
 * Running this simulation roughly 10G of RAM.
 * Internet connectivity is required from the hypervisor. Multiple packages are installed on both the switches and servers when the lab is created.
