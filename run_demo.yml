@@ -135,7 +135,7 @@
 
     - name: Copy Routing Configuration
       copy:
-        src: configurations/{{ansible_hostname}}/frr/frr.conf
+        src: configurations/{{ansible_hostname}}/etc/frr/frr.conf
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
       notify: apply frr config
