@@ -128,14 +128,14 @@
 
     - name: Copy Interfaces File
       copy:
-        src: configurations/{{ansible_hostname}}/interfaces
+        src: configurations/{{ansible_hostname}}/etc/network/interfaces
         dest: /etc/network/interfaces
         validate: ifup -a -s -i %s
       notify: apply interface changes
 
     - name: Copy Routing Configuration
       copy:
-        src: configurations/{{ansible_hostname}}/frr.conf
+        src: configurations/{{ansible_hostname}}/frr/frr.conf
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
       notify: apply frr config
