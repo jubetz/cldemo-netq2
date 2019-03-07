@@ -79,14 +79,12 @@
         - systemctl disable ntp.service
         - systemctl start ntp@mgmt.service
         - systemctl enable ntp@mgmt.service
-      when: ntp_location.stdout != "mgmt"
 
     - name: Enable FRR Zebra
       lineinfile:
         dest: /etc/frr/daemons
         line: "zebra=yes"
         regexp: "zebra="
-      notify: restart frr service
 
     - name: Enable FRR BGP
       lineinfile:
