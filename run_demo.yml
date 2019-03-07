@@ -6,7 +6,14 @@
       copy:
         src: configurations/{{ansible_hostname}}/interfaces
         dest: /etc/network/interfaces
-      register: reboot
+      
+    - name: Fix CITC bonds
+      blockinfile:
+        path: /etc/rc.local
+        block: |
+          /sbin/ethtool -s eth1 speed 1000 duplex full
+          /sbin/ethtool -s eth2 speed 1000 duplex full
+          systemctl restart networking
 
     # Ping script is so servers generate traffic to populate MAC tables
     - name: Configure Server01 Ping Cronjob
@@ -24,29 +31,24 @@
       become: yes
       become_user: cumulus
       when: inventory_hostname == "server02"
+      
+    - name: Install LLDP
+      apt:
+        name: lldpd
+        state: present
+        update_cache: yes
 
     - name: Correct LLDP Settings
       lineinfile:
         dest: /etc/lldpd.d/port_info.conf
         line: "configure lldp portidsubtype ifname"
         create: yes
-      notify: restart LLDP
-
-    - name: Apply LLDP Settings
-      meta: flush_handlers
 
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
-      when: citc is undefined
-
-  handlers:
-    - name: restart LLDP
-      service:
-        name: lldpd
-        state: restarted
-
+     
 - hosts: switches
   become: yes
   pre_tasks:
