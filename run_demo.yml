@@ -93,6 +93,12 @@
         src: configurations/{{ansible_hostname}}/etc/frr/frr.conf
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
+        
+    - name: Move netq agent to mgmt VRF
+      command: netq config add agent server 192.168.0.254 vrf mgmt
+      
+    - name: Move netq cli to mgmt VRF
+      command: netq config add cli server 192.168.0.254 vrf mgmt
        
     - name: reboot
       shell: sleep 5 && reboot
