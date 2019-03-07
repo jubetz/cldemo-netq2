@@ -35,55 +35,11 @@
     - name: Apply LLDP Settings
       meta: flush_handlers
 
-    - name: Add Cumulus Apt Key
-      apt_key:
-        url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
-        state: present
-      when: citc is undefined
-
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.4
-        update_cache: yes
-      when: citc is undefined
-
-    - name: Install NetQ
-      apt:
-        name: cumulus-netq
-        state: latest
-        update_cache: yes
-      register: install-netq
-      when: citc is undefined
-
     - name: Restart Rsyslog
       service:
         name: rsyslog
         state: restarted
       when: citc is undefined
-
-    - name: Enable NetQ Service
-      service:
-        name: netqd
-        enabled: yes
-        state: started
-      when: citc is undefined
-
-    - name: Pause to let NetQ service to start
-      pause:
-        seconds: 5
-      when: citc is undefined
-
-    - name: Add netq server IP
-      command: netq config add server 192.168.0.254
-      when: citc is undefined
-
-    - name: reboot
-      reboot:
-        pre_reboot_delay: 60
-   #   async: 0
-   #   poll: 0
-   #   ignore_errors: true
-   #   when: reboot.changed
 
   handlers:
     - name: restart LLDP
@@ -104,14 +60,6 @@
           Version {{ansible_lsb.release}} detected"
 
   tasks:
-    - name: Configured NTP in management VRF
-      command: "{{item}}"
-      with_items:
-        - systemctl stop ntp.service
-        - systemctl disable ntp.service
-        - systemctl start ntp@mgmt
-      when: citc is undefined
-
     - name: Enable FRR Zebra
       lineinfile:
         dest: /etc/frr/daemons
@@ -139,39 +87,6 @@
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
       notify: apply frr config
-
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.4
-        update_cache: yes 
-      when: citc is undefined
-
-    - name: Install/Update NetQ
-      apt:
-        name: cumulus-netq
-        state: latest
-        update_cache: yes
-      register: install-netq
-      when: citc is undefined
-
-    - name: Enable NetQ Service
-      service:
-        name: netqd
-        enabled: yes
-        state: started
-      when: citc is undefined
-
-    - name: Pause to let NetQ service to start
-      pause:
-        seconds: 5
-      when: citc is undefined
-
-    - name: Add netq server IP
-      command: netq config add server 192.168.0.254 vrf mgmt
-      when: citc is undefined
-
-    - name: Restart NetQ Agent
-      command: netq config restart agent
       
   handlers:
     - name: restart frr service
@@ -188,18 +103,3 @@
       service:
         name: frr
         state: reloaded
-
-#need to restart all the netq agents to cleanup interface checks.
-- hosts: servers
-  become: yes
-  
-  tasks:
-    - name: Restart all netq agents
-      command: netq config restart agent
-
-- hosts: network
-  become: yes
-  
-  tasks:
-    - name: Restart all netq agents
-      command: netq config restart agent
