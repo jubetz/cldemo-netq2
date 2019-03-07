@@ -47,7 +47,7 @@
         name: lldpd
         state: restarted
 
-- hosts: network
+- hosts: switches
   become: yes
   pre_tasks:
     # To prevent unexpected problems, define the minimum Cumulus Linux
