@@ -58,8 +58,15 @@
         msg: >
           "Cumulus Linux version must be 3.5 or later.
           Version {{ansible_lsb.release}} detected"
-
+          
   tasks:
+    - name: Configure NTP in management VRF
+      command: "{{item}}"
+      with_items:
+        - systemctl stop ntp.service
+        - systemctl disable ntp.service
+        - systemctl start ntp@mgmt
+
     - name: Enable FRR Zebra
       lineinfile:
         dest: /etc/frr/daemons
