@@ -43,6 +43,16 @@
         dest: /etc/lldpd.d/port_info.conf
         line: "configure lldp portidsubtype ifname"
         create: yes
+                
+    - name: Install traceroute
+      apt:
+        name: traceroute
+        state: present
+       
+    - name: Install NTP
+      apt:
+        name: ntp
+        state: present
         
     - name: reboot
       shell: sleep 5 && reboot
@@ -62,12 +72,14 @@
           Version {{ansible_lsb.release}} detected"
           
   tasks:
-    - name: Configure NTP in management VRF
-      command: "{{item}}"
+    - name: Move NTP to Mgmt VRF
+      command: " {{ item }} "
       with_items:
         - systemctl stop ntp.service
         - systemctl disable ntp.service
-        - systemctl start ntp@mgmt
+        - systemctl start ntp@mgmt.service
+        - systemctl enable ntp@mgmt.service
+      when: ntp_location.stdout != "mgmt"
 
     - name: Enable FRR Zebra
       lineinfile:
