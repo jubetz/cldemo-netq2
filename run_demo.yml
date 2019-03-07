@@ -43,11 +43,11 @@
         dest: /etc/lldpd.d/port_info.conf
         line: "configure lldp portidsubtype ifname"
         create: yes
-
-    - name: Restart Rsyslog
-      service:
-        name: rsyslog
-        state: restarted
+        
+    - name: reboot
+      shell: sleep 5 && reboot
+      async: 1
+      poll: 0
      
 - hosts: switches
   become: yes
@@ -81,34 +81,21 @@
         dest: /etc/frr/daemons
         line: "bgpd=yes"
         regexp: "bgpd="
-      notify: restart frr service
 
     - name: Copy Interfaces File
       copy:
         src: configurations/{{ansible_hostname}}/etc/network/interfaces
         dest: /etc/network/interfaces
         validate: ifup -a -s -i %s
-      notify: apply interface changes
-
+    
     - name: Copy Routing Configuration
       copy:
         src: configurations/{{ansible_hostname}}/etc/frr/frr.conf
         dest: /etc/frr/frr.conf
         validate: vtysh -C -f %s
-      notify: apply frr config
-      
-  handlers:
-    - name: restart frr service
-      service:
-        name: frr
-        state: restarted
-
-    - name: apply interface changes
-      service:
-        name: networking
-        state: reloaded
-
-    - name: apply frr config
-      service:
-        name: frr
-        state: reloaded
+       
+    - name: reboot
+      shell: sleep 5 && reboot
+      async: 1
+      poll: 0      
+     
